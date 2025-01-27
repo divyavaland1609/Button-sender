@@ -655,6 +655,9 @@ input:focus {
 .custom-prolayout .ant-layout-sider {
   width: 250px;
 }
+div:where(.css-dev-only-do-not-override-18r4zd7).ant-typography, :where(.css-dev-only-do-not-override-18r4zd7).ant-typography p {
+  margin-bottom: 0em;
+}
 
 .custom-prolayout .ant-layout-sider-dark {
   background-color: #004fd9;
