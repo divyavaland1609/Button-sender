@@ -180,6 +180,7 @@ import {
   FileImageOutlined,
   FileTextOutlined,
   PlusOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
 import { useDnD } from "./DnDContext";
 
@@ -205,24 +206,24 @@ function Sidebar({ collapsed }) {
     },
     {
       id: 2,
-      name: "Text With Button",
+      name: "Button",
       type: "button",
       bgColor: "#878D98",
       icons: <PlusOutlined style={{ fontSize: "20px" }} />,
     },
     {
       id: 3,
-      name: "Poll Message",
+      name: "Poll",
       type: "poll",
       bgColor: "#FF6F40",
       icons: <BarChartOutlined style={{ fontSize: "20px" }} />,
     },
     {
       id: 4,
-      name: "List Message",
+      name: "List/Menu",
       type: "list",
       bgColor: "#F2AF41",
-      icons: <BarChartOutlined style={{ fontSize: "20px" }} />,
+      icons: <UnorderedListOutlined  style={{ fontSize: "20px" }} />,
     },
     {
       id: 5,
