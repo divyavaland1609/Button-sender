@@ -316,78 +316,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
           </div>
         );
 
-      case "richcard_carosal":
-        return (
-          <div className="chat-message carousel-message">
-            {item?.originData?.richCardCarousels?.cards?.map((card, index) => (
-              <Card
-                key={`carousel-${index}`}
-                title={item?.originData?.label}
-                bordered={false}
-                style={{ marginInline: 5 }}
-              >
-                <img
-                  src={card?.mediaUrl}
-                  alt="custom content"
-                  className="chat-image"
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                  className="message-text"
-                  dangerouslySetInnerHTML={{
-                    __html: card?.content?.replace(/\n/g, "<br/>") || "message",
-                  }}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    marginBottom: 5,
-                  }}
-                  className="message-text"
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      card?.description?.replace(/\n/g, "<br/>") || "message",
-                  }}
-                />
-                {card?.actions ? (
-                  <>
-                    {card?.actions?.map((btn, i) => (
-                      <Button
-                        key={`button-${i}`}
-                        type="default"
-                        size="middle"
-                        color="primary"
-                        variant="outlined"
-                        onClick={() =>
-                          handleButtonClick(
-                            btn.title,
-                            item?.originData?.id,
-                            item?.originData?.type,
-                            `handle-${index}-${i}`
-                          )
-                        }
-                      >
-                        {btn.title}
-                      </Button>
-                    ))}
-                  </>
-                ) : (
-                  <Button
-                    type="default"
-                    size="middle"
-                    onClick={() => alert(`Button clicked: ${card?.content}`)}
-                  >
-                    {card?.content}
-                  </Button>
-                )}
-              </Card>
-            ))}
-          </div>
-        );
+
       case "Text":
         return (
           <div
@@ -411,7 +340,8 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
             />
           </div>
         );
-      case "list":
+      
+        case "list":
         return (
           <div
             className={`chat-message ${

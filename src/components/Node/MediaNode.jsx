@@ -348,14 +348,14 @@ function MediaNode({ data, selected }) {
             </Flex>
           </div>
 
-          <div className="card-body"  style={{background:"rgba(255, 255, 255, 0.8)",borderRadius:"12px",width:"210px"}}>
+          <div className="card-body"  style={{background:"rgba(255, 255, 255, 0.8)",borderRadius:"14px",width:"210px"}}>
             <Image
               style={{
                 marginTop: "3px",
                 borderRadius: "14px",
                 width: "210px",
                 height: "100px",
-                objectFit: "cover",
+                // objectFit: "cover",
               }}
               preview={false}
               alt="example"

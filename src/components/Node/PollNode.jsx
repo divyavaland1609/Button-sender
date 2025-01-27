@@ -228,7 +228,6 @@ function PollNode({ data, selected }) {
       </Fragment>
     ));
   };
-  
   const handleNodeStateChange = (checked) => {
     setEnabled(checked);
 
@@ -323,8 +322,7 @@ function PollNode({ data, selected }) {
       <div
         style={{
           borderRadius: "16px",
-          paddingTop: "0.5px",
-          // padding: "0px",
+          paddingTop: "1.4px",
           border: isConnected
             ? "2px solid #52C41A"
             : selected
