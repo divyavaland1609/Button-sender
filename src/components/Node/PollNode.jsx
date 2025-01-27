@@ -228,6 +228,7 @@ function PollNode({ data, selected }) {
       </Fragment>
     ));
   };
+  
   const handleNodeStateChange = (checked) => {
     setEnabled(checked);
 

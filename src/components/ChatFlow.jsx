@@ -4,14 +4,17 @@ import {
   Badge,
   Button,
   Card,
+  Checkbox,
   Col,
   Divider,
   Flex,
   Input,
+  Progress,
+  Radio,
   Row,
   Typography,
 } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import {
   CalendarOutlined,
   EnvironmentOutlined,
@@ -21,11 +24,14 @@ import {
   PhoneOutlined,
   SendOutlined,
   SyncOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 
 const ChatFlow = ({ styles, nodeData, edges }) => {
   const [chats, setChats] = useState([]);
   const [currentNodeId, setCurrentNodeId] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
   const chatContainerRef = useRef(null);
   useEffect(() => {
     if (nodeData && Array.isArray(nodeData)) {
@@ -74,6 +80,21 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
     return null;
   };
 
+  const handleOptionChange = (e) => {
+    const value = e.target.value;
+
+    if (item?.originData?.allowMultiple) {
+      setSelectedOptions((prev) =>
+        prev.includes(value)
+          ? prev.filter((option) => option !== value)
+          : [...prev, value]
+      );
+    } else {
+      // Clear previous selections and set the new single value
+      setSelectedOptions([value]);
+    }
+  };
+
   // Handle button click to move to the next node
   const handleButtonClick = (buttonTitle, currentNodeId, type, handle) => {
     setChats((prevChats) => [
@@ -100,6 +121,53 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
         },
       ]);
     }
+  };
+
+  const RenderOptions = ({ item }) => {
+    if (!item || !item.originData?.answers) return null;
+
+    return item?.originData?.answers?.map(({ value, label }, index) => (
+      <Fragment key={index}>
+        <Row
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Col>
+            {item?.originData?.allowMultiple ? (
+              <Checkbox
+                value={label}
+                checked={selectedOptions.includes(label)}
+                onChange={handleOptionChange}
+              >
+                {value ?? `option-${index + 1}`}
+              </Checkbox>
+            ) : (
+              <Radio
+                value={label}
+                checked={selectedOptions[0] === label}
+                onChange={handleOptionChange}
+              >
+                {value ?? `option-${index + 1}`}
+              </Radio>
+            )}
+          </Col>
+          <Col>
+            <Avatar icon={<UserOutlined />} size="small" />
+          </Col>
+        </Row>
+        <Progress
+          showInfo={false}
+          percent={32}
+          strokeColor={selectedOptions.includes(label) ? "#00313e" : "#87d068"}
+          strokeWidth={10}
+          style={{ marginBottom: "8px" }}
+        />
+      </Fragment>
+    ));
   };
 
   const renderChatContent = (item) => {
@@ -202,76 +270,38 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
             ))}
           </div>
         );
-      case "richcard":
+      case "poll":
         return (
-          <div className="chat-message card-message">
-            <Card title={item?.originData?.label} bordered={false}>
-              <img
-                src={item?.originData?.mediaUrl}
-                alt="custom content"
-                className="chat-image"
-              />
+          <div className="chat-message media-message">
+            {/* <Card title={item?.originData?.label} bordered={false}> */}
               <div
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
+                  padding: "0px 0px 0px 0px",
                 }}
                 className="message-text"
                 dangerouslySetInnerHTML={{
                   __html:
-                    item?.originData?.content?.replace(/\n/g, "<br/>") ||
-                    "message",
+                    item?.originData?.question?.replace(/\n/g, "<br/>") ||
+                    "question",
                 }}
               />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  marginBottom: 5,
-                }}
-                className="message-text"
-                dangerouslySetInnerHTML={{
-                  __html:
-                    item?.originData?.description?.replace(/\n/g, "<br/>") ||
-                    "message",
-                }}
-              />
-              {item?.originData?.actions ? (
-                <>
-                  {item?.originData?.actions?.map((btn, i) => (
-                    <Button
-                      key={`button-${i}`}
-                      type="default"
-                      size="middle"
-                      color="primary"
-                      variant="outlined"
-                      onClick={() =>
-                        handleButtonClick(
-                          btn.title,
-                          item?.originData?.id,
-                          item?.originData?.type,
-                          `handle-${i}`
-                        )
-                      }
-                    >
-                      {btn.title}
-                    </Button>
-                  ))}
-                </>
+              {item?.originData?.allowMultiple ? (
+                <Checkbox.Group style={{ width: "100%" }}>
+                  <RenderOptions item={item} />
+                </Checkbox.Group>
               ) : (
-                <Button
-                  type="default"
-                  size="middle"
-                  onClick={() =>
-                    alert(`Button clicked: ${item?.originData?.content}`)
-                  }
+                <Radio.Group
+                  onChange={handleOptionChange}
+                  value={selectedOptions[0]}
+                  style={{ width: "100%" }}
                 >
-                  {item?.originData?.content}
-                </Button>
+                  <RenderOptions item={item} />
+                </Radio.Group>
               )}
-            </Card>
+            {/* </Card> */}
           </div>
         );
+
       case "richcard_carosal":
         return (
           <div className="chat-message carousel-message">
