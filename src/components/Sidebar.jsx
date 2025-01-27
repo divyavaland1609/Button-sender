@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDnD } from "./DnDContext";
 import { Card, Col, Layout, Row, Tooltip, Typography } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { BarChartOutlined, PlusOutlined } from "@ant-design/icons";
 import image from "../assets/footer-bg-1.png";
 import { ProLayout } from "@ant-design/pro-components";
 
@@ -18,9 +18,16 @@ function Sidebar({ collapsed }) {
   const cards = [
     { id: 1, text: "Text", type: "Text", bgColor: "#878D98" },
     { id: 2, text: "Text With Button", type: "button", bgColor: "#F53F5F" },
-    { id: 3, text: "Poll Message", type: "poll", bgColor: "#FF6F40" },
-    { id: 4, text: "List Message", type: "list", bgColor: "#F2AF41" },
-    { id: 5, text: "Media", type: "media", bgColor: "#38C792" },
+    {
+      id: 3,
+      text: "Richcard",
+      type: "richcard",
+      bgColor: "#F2AF41",
+      icons: <BarChartOutlined style={{ fontSize: "20px" }} />,
+    },
+    { id: 4, text: "Poll Message", type: "poll", bgColor: "#FF6F40" },
+    { id: 5, text: "List Message", type: "list", bgColor: "#F2AF41" },
+    { id: 6, text: "Media", type: "media", bgColor: "#38C792" },
   ];
   return (
     // <ProLayout
@@ -37,81 +44,79 @@ function Sidebar({ collapsed }) {
     //   menuContentRender={() => (
     //     <div className="pro-sidebar" style={{ height: "100%" }}>
     //       <br />
-          <Row>
-            {cards.map((card) => (
-              <Col key={card.id} md={24}>
-                <div
-                  draggable
-                  onDragStart={(event) => onDragStart(event, card.type)}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100%",
-                    // background:"red"
-                  }}
-                >
-                  <Card
-                    hoverable
-                    style={{
-                      borderRadius: "10px",
-                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-                      transition: "transform 0.2s",
-                      marginBottom: "10px",
-                      display: "flex",
-                      flexDirection: "column",
-                      width: "100%",
-                      border: "none",
-                      height: "100%",
-                    }}
-                    bodyStyle={{
-                      backgroundColor: card.bgColor,
-                      padding: "10px",
-                      borderRadius: "10px",
-                      display: "flex",
-                      flexDirection: "column",
-                      flex: 1,
-                    }}
+    <Row>
+      {cards.map((card) => (
+        <Col key={card.id} md={24}>
+          <div
+            draggable
+            onDragStart={(event) => onDragStart(event, card.type)}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+              // background:"red"
+            }}
+          >
+            <Card
+              hoverable
+              style={{
+                borderRadius: "10px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                transition: "transform 0.2s",
+                marginBottom: "10px",
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+                border: "none",
+                height: "100%",
+              }}
+              bodyStyle={{
+                backgroundColor: card.bgColor,
+                padding: "10px",
+                borderRadius: "10px",
+                display: "flex",
+                flexDirection: "column",
+                flex: 1,
+              }}
+            >
+              {collapsed ? (
+                <Tooltip placement="left" title={card.name}>
+                  <PlusOutlined style={{ fontSize: "30px", color: "black" }} />
+                </Tooltip>
+              ) : (
+                <>
+                  <Row
+                    align={"middle"}
+                    justify={"start"}
+                    style={{ backgroundColor: card.bgColor }}
                   >
-                    {collapsed ? (
-                       <Tooltip placement="left" title={card.name}>
+                    <div style={{ backgroundColor: card.bgColor }}>
                       <PlusOutlined
-                              style={{ fontSize: "30px", color: "black" }}
-                            />
-                     </Tooltip>
-                    ) : (
-                      <>
-                        <Row
-                          align={"middle"}
-                          justify={"start"}
-                          style={{ backgroundColor: card.bgColor }}
-                        >
-                          <div style={{ backgroundColor: card.bgColor }}>
-                            <PlusOutlined
-                              style={{ fontSize: "30px", color: "black" }}
-                            />
-                          </div>
-                          {/* <Row
+                        style={{ fontSize: "30px", color: "black" }}
+                      />
+                    </div>
+                    {/* <Row
                         justify={"center"}
                         gutter={[16, 24]}
                         align="middle"
                         style={{ marginTop: "10px" }}
                       > */}
-                          <Typography.Text
-                            style={{
-                              paddingLeft: "10px",
-                              backgroundColor: card.bgColor,
-                            }}
-                          >
-                            {card.text}
-                          </Typography.Text>
-                        </Row>
-                      </>
-                    )}
-                  </Card>
-                </div>
-              </Col>
-            ))}
-          </Row>
+                    <Typography.Text
+                      style={{
+                        paddingLeft: "10px",
+                        backgroundColor: card.bgColor,
+                      }}
+                    >
+                      {card.text}
+                    </Typography.Text>
+                  </Row>
+                </>
+              )}
+            </Card>
+          </div>
+        </Col>
+      ))}
+    </Row>
     //     </div>
     //   )}
     // />

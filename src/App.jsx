@@ -65,6 +65,8 @@ import {
   setUpdateNodeData,
 } from "./redux/nodesSlice";
 import { PageContainer, ProLayout } from "@ant-design/pro-components";
+import RichcardNodeSidebar from "./components/sidebar/RichcardNodeSidebar";
+import RichcardNode from "./components/Node/RichCardNode";
 
 const defaultNodePosition = {
   x: 250, // or any X coordinate
@@ -482,6 +484,16 @@ const DnDFlow = () => {
             setSelectedNode={setSelectedNode}
           />
         );
+        case "richcard":
+          return (
+            <div className="sidebar">
+              <RichcardNodeSidebar
+                title={"Rich Card"}
+                selectedNode={selectedNode}
+                setSelectedNode={setSelectedNode}
+              />
+            </div>
+          );
       case "poll":
         return (
           <PollNodeSider
@@ -739,6 +751,7 @@ const DnDFlow = () => {
                   nodeTypes={{
                     Text: TextNode,
                     button: ButtonNode,
+                    richcard: RichcardNode,
                     poll: PollNode,
                     list: ListNode,
                     media: MediaNode,
