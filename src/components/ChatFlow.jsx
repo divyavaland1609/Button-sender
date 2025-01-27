@@ -9,6 +9,7 @@ import {
   Drawer,
   Flex,
   Input,
+  message,
   Row,
   Typography,
 } from "antd";
@@ -105,11 +106,11 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
   };
 
   const handleOpen = () => {
-    setOpen(true); // Set the state to open the drawer
+    setOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false); // Set the state to close the drawer
+    setOpen(false);
   };
 
   const renderChatContent = (item) => {
@@ -436,30 +437,40 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
               size="small"
               block
               type="text"
-              onClick={handleOpen}
+              onClick={() => {
+               console.log("button clicked"), 
+               handleOpen(),
+               console.log("button clicked2")
+
+              }}
             >
-              <MessageOutlined />
+              <MessageOutlined
+                onClick={() => {
+                  message("Message"), handleOpen();
+                }}
+              />
               List
             </Button>
             <Drawer
-        title="Basic Drawer"
-        placement="bottom"
-        closable={false}
-        onClose={handleClose} // Use a callback reference
-        open={open} // Controlled by state
-        key="bottom"
-        style={{ background: "red" }}
-      >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Drawer>
+              title="Basic Drawer"
+              // placement="bottom"
+              // closable={true}
+              onClose={handleClose} // Use a callback reference
+              open={open} // Controlled by state
+              // key="bottom"
+              style={{ background: "red" }}
+            >
+              <p>Some contents...</p>
+              <p>Some contents...</p>
+              <p>Some contents...</p>
+            </Drawer>
             {/* {Array.isArray(item.originData.actions) &&
               item.originData.actions.length > 1 && (
                 <Divider style={{ margin: "0px" }} />
               )} */}
           </div>
         );
+        
       default:
         return (
           <div className="chat-message text-message">
