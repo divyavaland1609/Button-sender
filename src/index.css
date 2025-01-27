@@ -1,0 +1,23 @@
+.react-flow__node-selectorNode {
+  font-size: 12px;
+  background: #eee;
+  border: 1px solid #555;
+  border-radius: 5px;
+  text-align: center;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+.dndflow {
+  display: flex;
+  width: 100%;
+  height: 930px;
+}
+.dndflow .reactflow-wrapper {
+  height: 930px;
+  /* overflow: hidden; */
+}
+
+
+
