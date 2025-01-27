@@ -5,6 +5,7 @@ import {
   Button,
   Card,
   Col,
+  Divider,
   Flex,
   Input,
   Row,
@@ -12,14 +13,19 @@ import {
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import {
+  CalendarOutlined,
+  EnvironmentOutlined,
+  LinkOutlined,
+  MessageOutlined,
   PaperClipOutlined,
+  PhoneOutlined,
   SendOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
 
 const ChatFlow = ({ styles, nodeData, edges }) => {
   const [chats, setChats] = useState([]);
-  const [currentNodeId,setCurrentNodeId] = useState(null);
+  const [currentNodeId, setCurrentNodeId] = useState(null);
   const chatContainerRef = useRef(null);
   useEffect(() => {
     if (nodeData && Array.isArray(nodeData)) {
@@ -109,40 +115,74 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
               }}
               dangerouslySetInnerHTML={{
                 __html:
-                  item?.originData?.label?.replace(/\n/g, "<br/>") || "message",
+                  item?.originData?.label
+                    ?.replace(/<p>/g, "<span>")
+                    ?.replace(/<\/p>/g, "</span>") || "message",
               }}
             />
             {item?.originData?.actions ? (
               <>
-                {item?.originData?.actions?.map((btn, i) => (
-                  <Button
-                    key={`button-${i}`}
-                    type="default"
-                    size="middle"
-                    color="primary"
-                    variant="outlined"
-                    onClick={() =>
-                      handleButtonClick(
-                        btn.title,
-                        item?.originData?.id,
-                        item?.originData?.type,
-                        `handle-${i}`
-                      )
-                    }
-                  >
-                    {btn.title}
-                  </Button>
-                ))}
+                {Array.isArray(item?.originData?.actions) &&
+                  item.originData.actions.map((btn, i) => (
+                    <React.Fragment key={`action-${i}`}>
+                      <Button
+                        // className="btn"
+                        size="small"
+                        block
+                        type="text"
+                        // color="primary"
+                        onClick={() =>
+                          handleButtonClick(
+                            btn.title,
+                            item?.originData?.id,
+                            item?.originData?.type,
+                            `handle-${i}`
+                          )
+                        }
+                      >
+                        {btn.type === "quick" && (
+                          <Typography.Text>
+                            <MessageOutlined /> {btn?.title}
+                          </Typography.Text>
+                        )}
+                        {btn.type === "call" && (
+                          <Typography.Text>
+                            <PhoneOutlined /> {btn?.title}
+                          </Typography.Text>
+                        )}
+                        {btn.type === "url" && (
+                          <Typography.Text>
+                            <LinkOutlined /> {btn?.title}
+                          </Typography.Text>
+                        )}
+                        {btn.type === "location" && (
+                          <Typography.Text>
+                            <EnvironmentOutlined /> {btn?.title}
+                          </Typography.Text>
+                        )}
+                        {btn.type === "calendar" && (
+                          <Typography.Text>
+                            <CalendarOutlined /> {btn?.title}
+                          </Typography.Text>
+                        )}
+                      </Button>
+                      {i < item.originData.actions.length - 1 && (
+                        <Divider style={{ margin: "0px" }} />
+                      )}
+                    </React.Fragment>
+                  ))}
               </>
             ) : (
               <Button
-                type="default"
-                size="middle"
+                size="small"
+                block
+                type="text"
                 onClick={() =>
                   alert(`Button clicked: ${item?.originData?.content}`)
                 }
               >
-                {item?.originData?.content}
+                <MessageOutlined />
+                Default Button
               </Button>
             )}
           </div>
@@ -150,24 +190,16 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
       case "media":
         return (
           <div className="chat-message media-message">
-            <img
-              src={item?.originData?.mediaUrl}
-              alt="custom content"
-              className="chat-image"
-            />
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                marginTop: 5,
-              }}
-              className="message-text"
-              dangerouslySetInnerHTML={{
-                __html:
-                  item?.originData?.content?.replace(/\n/g, "<br/>") ||
-                  "message",
-              }}
-            />
+            {console.log("2222-->", item?.originData?.mediaArray)}
+            {item?.originData?.mediaArray.map((media, index) => (
+              <div key={`media-${index}`}>
+                <img
+                  src={media.url}
+                  alt="custom content"
+                  className="chat-image"
+                />
+              </div>
+            ))}
           </div>
         );
       case "richcard":
@@ -347,7 +379,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
   return (
     <div style={{ ...styles, background: "#316FF6" }}>
       <div className="inverted-header-radius">
-        <Row align="middle">
+        <Row align="middle" style={{ padding: "5px" }}>
           <Col md={22} style={{ paddingLeft: "5px" }}>
             <Flex align="center" gap={15}>
               <Badge dot style={{ backgroundColor: "#52c41a" }}>

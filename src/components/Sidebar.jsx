@@ -7,9 +7,9 @@ import { ProLayout } from "@ant-design/pro-components";
 
 const { Sider } = Layout;
 
-function Sidebar() {
+function Sidebar({ collapsed }) {
   const [_, setType] = useDnD();
-  const [collapsed, setCollapsed] = useState(false); // State to manage sidebar collapse
+  // const [collapsed, setCollapsed] = useState(false); // State to manage sidebar collapse
 
   const onDragStart = (event, nodeType) => {
     setType(nodeType);
@@ -74,7 +74,9 @@ function Sidebar() {
                   >
                     {collapsed ? (
                        <Tooltip placement="left" title={card.name}>
-                       <Row justify="center">{card.icons}</Row>
+                      <PlusOutlined
+                              style={{ fontSize: "30px", color: "black" }}
+                            />
                      </Tooltip>
                     ) : (
                       <>
