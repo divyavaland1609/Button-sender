@@ -488,7 +488,7 @@ function PollNode({ data, selected }) {
             >
               <small>{alldata?.data?.question ?? "Question"}</small>
             </Paragraph>
-            <br />
+            
             <Col span={24}>
               {alldata?.data?.allowMultiple ? (
                 <Checkbox.Group style={{ width: "100%" }}>

@@ -58,6 +58,7 @@ export const nodesSlice = createSlice({
 
       state.nodes = updatedNodes;
     },
+    
     // setUpdateNodeData: (state, action) => {
     //   const { selectedNode, value, key } = action.payload;
     //   console.log("123--->",action.payload);

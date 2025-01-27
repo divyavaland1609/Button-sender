@@ -183,6 +183,12 @@ import {
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import { useDnD } from "./DnDContext";
+import { Card, Col, Layout, Row, Tooltip, Typography } from "antd";
+import { BarChartOutlined, PlusOutlined } from "@ant-design/icons";
+import image from "../assets/footer-bg-1.png";
+import { ProLayout } from "@ant-design/pro-components";
+
+const { Sider } = Layout;
 
 function Sidebar({ collapsed }) {
   const [_, setType] = useDnD();
@@ -212,21 +218,28 @@ function Sidebar({ collapsed }) {
       icons: <PlusOutlined style={{ fontSize: "20px" }} />,
     },
     {
+     
       id: 3,
+      text: "Richcard",
+      type: "richcard",
+      bgColor: "#F2AF41",
+      icons: <BarChartOutlined style={{ fontSize: "20px" }} />,
+    },
+    { id: 4,
       name: "Poll",
       type: "poll",
       bgColor: "#FF6F40",
       icons: <BarChartOutlined style={{ fontSize: "20px" }} />,
     },
     {
-      id: 4,
+      id: 5,
       name: "List/Menu",
       type: "list",
       bgColor: "#F2AF41",
       icons: <UnorderedListOutlined  style={{ fontSize: "20px" }} />,
     },
     {
-      id: 5,
+      id: 6,
       name: "Media",
       type: "media",
       bgColor: "#38C792",
