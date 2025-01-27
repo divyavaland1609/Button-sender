@@ -6,6 +6,7 @@ import {
   Card,
   Col,
   Divider,
+  Drawer,
   Flex,
   Input,
   Row,
@@ -25,6 +26,7 @@ import {
 
 const ChatFlow = ({ styles, nodeData, edges }) => {
   const [chats, setChats] = useState([]);
+  const [open, setOpen] = useState(false);
   const [currentNodeId, setCurrentNodeId] = useState(null);
   const chatContainerRef = useRef(null);
   useEffect(() => {
@@ -102,7 +104,18 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
     }
   };
 
+  const handleOpen = () => {
+    setOpen(true); // Set the state to open the drawer
+  };
+
+  const handleClose = () => {
+    setOpen(false); // Set the state to close the drawer
+  };
+
   const renderChatContent = (item) => {
+    {
+      console.log("type-->", item?.originData?.type);
+    }
     switch (item?.originData?.type) {
       case "button":
         return (
@@ -365,6 +378,86 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                   "message",
               }}
             />
+          </div>
+        );
+      case "list":
+        return (
+          <div
+            className={`chat-message ${
+              item?.originData?.role === "user"
+                ? "reply-message"
+                : "text-message"
+            }`}
+          >
+            {console.log("33-->", item?.originData)}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontWeight: "bold",
+              }}
+              className="message-text"
+              dangerouslySetInnerHTML={{
+                __html:
+                  item?.originData?.menuTitle?.replace(/\n/g, "<br/>") ||
+                  "message",
+              }}
+            />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+              className="message-text"
+              dangerouslySetInnerHTML={{
+                __html:
+                  item?.originData?.middleTitle?.replace(/\n/g, "<br/>") ||
+                  "message",
+              }}
+            />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+              className="message-text"
+              dangerouslySetInnerHTML={{
+                __html:
+                  item?.originData?.footerTitle?.replace(/\n/g, "<br/>") ||
+                  "message",
+              }}
+            />
+            {Array.isArray(item?.originData?.actions) ? (
+              <Divider style={{ margin: "0px" }} />
+            ) : (
+              ""
+            )}
+            <Button
+              size="small"
+              block
+              type="text"
+              onClick={handleOpen}
+            >
+              <MessageOutlined />
+              List
+            </Button>
+            <Drawer
+        title="Basic Drawer"
+        placement="bottom"
+        closable={false}
+        onClose={handleClose} // Use a callback reference
+        open={open} // Controlled by state
+        key="bottom"
+        style={{ background: "red" }}
+      >
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Drawer>
+            {/* {Array.isArray(item.originData.actions) &&
+              item.originData.actions.length > 1 && (
+                <Divider style={{ margin: "0px" }} />
+              )} */}
           </div>
         );
       default:
