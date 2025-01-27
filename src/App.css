@@ -1066,3 +1066,17 @@ div:where(.css-dev-only-do-not-override-tqzgtm).ant-typography, :where(.css-dev-
   min-width: 95%;
   margin: 24px 0;
 }
+
+/* :where(.css-dev-only-do-not-override-1vxsfpz).ant-image .ant-image-img {
+  width: 100%;
+  height: -131px;
+  height: auto;
+  vertical-align: middle;
+  margin-bottom: -7px;
+} */
+:where(.css-dev-only-do-not-override-tqzgtm).ant-image .ant-image-img {
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+  margin-bottom: -6px;
+}

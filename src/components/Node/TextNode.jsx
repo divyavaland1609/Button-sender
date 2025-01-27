@@ -139,6 +139,7 @@ const TextNode = ({ data, selected }) => {
       : "none",
   };
 
+
   const items = [
     alldata?.data?.isStartNode
       ? {
@@ -218,7 +219,7 @@ const TextNode = ({ data, selected }) => {
       <div
         style={{
           borderRadius: "16px",
-          paddingTop: "0.5px",
+          paddingTop: "1.4px",
           ...nodeStyle,
         }}
         onMouseEnter={() => {
