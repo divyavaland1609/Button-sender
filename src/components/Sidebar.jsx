@@ -174,7 +174,7 @@
 
 
 import React from "react";
-import { Card, Col, Row, Tooltip, Typography } from "antd";
+import { Card, Col, Row, Tooltip, Typography,Layout } from "antd";
 import {
   BarChartOutlined,
   FileImageOutlined,
@@ -183,8 +183,8 @@ import {
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import { useDnD } from "./DnDContext";
-import { Card, Col, Layout, Row, Tooltip, Typography } from "antd";
-import { BarChartOutlined, PlusOutlined } from "@ant-design/icons";
+// import { Card, Col, Layout, Row, Tooltip, Typography } from "antd";
+// import { BarChartOutlined, PlusOutlined } from "@ant-design/icons";
 import image from "../assets/footer-bg-1.png";
 import { ProLayout } from "@ant-design/pro-components";
 
@@ -220,7 +220,7 @@ function Sidebar({ collapsed }) {
     {
      
       id: 3,
-      text: "Richcard",
+      name: "Richcard",
       type: "richcard",
       bgColor: "#F2AF41",
       icons: <BarChartOutlined style={{ fontSize: "20px" }} />,
