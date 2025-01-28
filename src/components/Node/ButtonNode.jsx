@@ -429,7 +429,7 @@ const ButtonNode = ({ data, selected }) => {
                             background: "transparent",
                             position: "absolute",
                             width: "20px",
-                            left: "97%",
+                            left: "92%",
                             border: "none",
                             top: "52%",
                             height: "50px",
@@ -509,7 +509,7 @@ const ButtonNode = ({ data, selected }) => {
                   background: "transparent",
                   position: "absolute",
                   width: "20px",
-                  left: "97%",
+                  left: "92%",
                   border: "none",
                   top: "53%",
                   height: "50px",
@@ -525,7 +525,7 @@ const ButtonNode = ({ data, selected }) => {
                   alignItems: "center",
                   justifyContent: "center",
                   top: "0px",
-                  left: "79%",
+                  left: "80%",
                 }}
               >
                 {data?.isStartNode || alldata?.data?.isStartNode ? (

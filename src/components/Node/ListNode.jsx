@@ -10,7 +10,6 @@ import {
   Button,
   Dropdown,
   Flex,
-  Image,
 } from "antd";
 import {
   ArrowRightOutlined,
@@ -392,10 +391,10 @@ const ListNode = ({ data, selected }) => {
             style={{
               background: "rgba(255, 255, 255, 0.8)",
               borderRadius: "12px",
-              width: "200px",
+              width: "210px",
             }}
           >
-            <Handle
+            {/* <Handle
               type={
                 alldata?.data?.isStartNode || data.isStartNode
                   ? "source"
@@ -448,25 +447,105 @@ const ListNode = ({ data, selected }) => {
                   )}
                 </>
               )}
-            </div>
-            {alldata?.data?.mediaUrl ? (
-            <Image
+            </div> */}
+
+            <Handle
+              type="target"
+              position={Position.Left}
+              isConnectable
               style={{
-                height: "100px",
-                marginTop: "3px",
-                borderRadius: "14px",
-                objectFit: "cover",
-                width: "200px",
+                background: "transparent",
+                position: "absolute",
+                width: "20px",
+                left: alldata?.data?.isStartNode ? "auto" : "-8px",
+                right: alldata?.data?.isStartNode ? "-6px" : "auto",
+                border: "none",
+                top: "64%",
+                height: "50px",
+                zIndex: 10,
+                transform: "translateY(-50%)",
+                visibility: alldata?.data?.isStartNode ? "hidden" : "visible", // Hide left handle if start node
               }}
-              src={
-                alldata?.data?.mediaUrl ||
-                "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
-              }
-              alt="Media not found"
-              preview={false}
             />
-          ) : 
-          null}
+            <div
+              style={{
+                height: "6px",
+                display: "flex",
+                position: "absolute",
+                alignItems: "center",
+                justifyContent: "center",
+                top: "63%",
+                left: alldata?.data?.isStartNode ? "auto" : "-3px",
+                right: alldata?.data?.isStartNode ? "-3px" : "auto",
+                visibility: alldata?.data?.isStartNode ? "hidden" : "visible", // Hide left badge if start node
+              }}
+            >
+              {data?.isStartNode || alldata?.data?.isStartNode ? (
+                <>
+                  {isConnected ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </>
+              ) : (
+                <>
+                  {isConnectedToStartNode ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </>
+              )}
+            </div>
+
+            <Handle
+              type="source"
+              position={Position.Right}
+              isConnectable
+              style={{
+                background: "transparent",
+                position: "absolute",
+                width: "20px",
+                border: "none",
+                top: "66%",
+                height: "50px",
+                zIndex: 10,
+                transform: "translateY(-50%)",
+                visibility: alldata?.data?.isStartNode ? "visible" : "visible", // Always show right handle
+              }}
+            />
+            <div
+              style={{
+                height: "6px",
+                display: "flex",
+                position: "absolute",
+                alignItems: "center",
+                justifyContent: "center",
+                top: "63%",
+                left: alldata?.data?.isStartNode ? "auto" : "209px",
+                right: alldata?.data?.isStartNode ? "-2px" : "",
+              }}
+            >
+              {data?.isStartNode || alldata?.data?.isStartNode ? (
+                <>
+                  {isConnected ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </>
+              ) : (
+                <>
+                  {isConnectedToStartNode ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </>
+              )}
+            </div>
+
             <Typography>
               <Title
                 level={5}
@@ -494,6 +573,23 @@ const ListNode = ({ data, selected }) => {
               >
                 {alldata?.data?.footerTitle ?? "Footer Title"}
               </Text>
+              {alldata?.data?.mediaUrl ? (
+                <Image
+                  style={{
+                    height: "100px",
+                    marginTop: "3px",
+                    borderRadius: "14px",
+                    objectFit: "cover",
+                    width: "200px",
+                  }}
+                  src={
+                    alldata?.data?.mediaUrl ||
+                    "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
+                  }
+                  alt="Media not found"
+                  preview={false}
+                />
+              ) : null}
               {alldata?.data?.actions?.map((action, i) => (
                 <>
                   <Text

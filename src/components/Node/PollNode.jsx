@@ -191,6 +191,7 @@ function PollNode({ data, selected }) {
         <Row
           style={{
             width: "100%",
+            padding: "10px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -367,65 +368,167 @@ function PollNode({ data, selected }) {
         
           }}
         > */}
-          <div className="inverted-border-radius shadow-orange">
-            <Flex className="flex-grow" align="center" justify="space-between">
-              <Typography className="title-name">
-                {alldata?.data?.templateName ?? "Poll Message"}
-              </Typography>
+        <div className="inverted-border-radius shadow-orange">
+          <Flex className="flex-grow" align="center" justify="space-between">
+            <Typography className="title-name">
+              {alldata?.data?.templateName ?? "Poll Message"}
+            </Typography>
 
-              <Flex gap={5} align="center">
-                <Switch
-                  // style={{ marginBottom: "0px" }}
-                  checked={enabled}
-                  disabled={data.isStartNode || alldata?.data?.isStartNode}
-                  onChange={(checked) => handleNodeStateChange(checked)}
-                />
-                {/* <Switch
+            <Flex gap={5} align="center">
+              <Switch
+                // style={{ marginBottom: "0px" }}
+                checked={enabled}
+                disabled={data.isStartNode || alldata?.data?.isStartNode}
+                onChange={(checked) => handleNodeStateChange(checked)}
+              />
+              {/* <Switch
                   style={{ marginBottom: "7px" }}
                   checked={enabled}
                   disabled={data.isStartNode || alldata?.data?.isStartNode}
                   onChange={(checked) => handleNodeStateChange(checked)}
                 /> */}
 
-                <Dropdown
-                  menu={{
-                    items,
-                  }}
-                  trigger={["click"]}
-                  placement="topLeft"
-                >
-                  <MoreOutlined
-                    className="more-outlined-icon"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                </Dropdown>
-              </Flex>
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                trigger={["click"]}
+                placement="topLeft"
+              >
+                <MoreOutlined
+                  className="more-outlined-icon"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </Dropdown>
             </Flex>
-          </div>
+          </Flex>
+        </div>
 
-          <div className="card-body" style={{background:"rgba(255, 255, 255, 0.8)",borderRadius:"12px",width:"200px",}}>
-            {/* {alldata?.data?.isStartNode || data.isStartNode ? null : ( */}
+        <div
+          className="card-body"
+          style={{
+            background: "rgba(255, 255, 255, 0.8)",
+            borderRadius: "12px",
+            width: "200px",
+          }}
+        >
+          {/* {alldata?.data?.isStartNode || data.isStartNode ? null : ( */}
 
+          {alldata?.data?.mediaUrl ? (
+            <Image
+              style={{
+                height: "100px",
+                marginTop: "3px",
+                borderRadius: "14px",
+                objectFit: "cover",
+                width: "200px",
+              }}
+              src={
+                alldata?.data?.mediaUrl ||
+                "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
+              }
+              alt="Media not found"
+              preview={false}
+            />
+          ) : null}
+          <>
+            <Handle
+              type="target"
+              position={Position.Left}
+              isConnectable
+              style={{
+                background: "transparent",
+                position: "absolute",
+                width: "20px",
+                left: alldata?.data?.isStartNode ? "auto" : "-3px",
+                right: alldata?.data?.isStartNode ? "-6px" : "auto",
+                border: "none",
+                top: "64%",
+                height: "50px",
+                zIndex: 10,
+                transform: "translateY(-50%)",
+                visibility: alldata?.data?.isStartNode ? "hidden" : "visible",
+              }}
+            />
+            <div
+              style={{
+                height: "6px",
+                display: "flex",
+                position: "absolute",
+                alignItems: "center",
+                justifyContent: "center",
+                top: "64%",
+                left: alldata?.data?.isStartNode ? "auto" : "-3px",
+                right: alldata?.data?.isStartNode ? "-3px" : "auto",
+                visibility: alldata?.data?.isStartNode ? "hidden" : "visible",
+              }}
+            >
+              {data?.isStartNode || alldata?.data?.isStartNode ? (
+                <>
+                  {isConnected ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </>
+              ) : (
+                <>
+                  {isConnectedToStartNode ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </>
+              )}
+            </div>
 
-            {alldata?.data?.mediaUrl?(
-               <Image
-               style={{
-                 height: "100px",
-                 marginTop: "3px",
-                 borderRadius: "14px",
-                 objectFit: "cover",
-                 width: "200px",
-               }}
-               src={
-                 alldata?.data?.mediaUrl ||
-                 "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
-               }
-               alt="Media not found"
-               preview={false}
-             />
-             ):null}
-            <>
-              <Handle
+            <Handle
+              type="source"
+              position={Position.Right}
+              isConnectable
+              style={{
+                background: "transparent",
+                position: "absolute",
+                width: "18px",
+                border: "none",
+                top: "65%",
+                height: "37px",
+                zIndex: 10,
+                transform: "translateY(-50%)",
+                visibility: alldata?.data?.isStartNode ? "visible" : "visible",
+              }}
+            />
+            <div
+              style={{
+                height: "6px",
+                display: "flex",
+                position: "absolute",
+                alignItems: "center",
+                justifyContent: "center",
+                top: "63%",
+                left: alldata?.data?.isStartNode ? "auto" : "200px",
+                right: alldata?.data?.isStartNode ? "-2px" : "",
+              }}
+            >
+              {data?.isStartNode || alldata?.data?.isStartNode ? (
+                <>
+                  {isConnected ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </>
+              ) : (
+                <>
+                  {isConnectedToStartNode ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </>
+              )}
+            </div>
+            {/* <Handle
                 id="123"
                 type={
                   alldata?.data?.isStartNode || data.isStartNode
@@ -480,11 +583,11 @@ function PollNode({ data, selected }) {
                     </>
                   )}
                 </div>
-              </Handle>
-            </>
-            {/* )} */}
+              </Handle> */}
+          </>
+          {/* )} */}
 
-            {/* {alldata?.data?.mediaUrl ? (
+          {/* {alldata?.data?.mediaUrl ? (
               <img
                 src={alldata?.data?.mediaUrl}
                 alt="Node Media"
@@ -498,33 +601,33 @@ function PollNode({ data, selected }) {
               />
             ) : null} */}
 
-            <Paragraph
-              style={{
-                lineHeight: "1.00",
-                padding:"10px",
-                // paddingLeft: "10px",
-                // padding: "5px 5px 20px 5px",
-              }}
-            >
-              <small>{alldata?.data?.question ?? "Question"}</small>
-            </Paragraph>
-            
-            <Col span={24}>
-              {alldata?.data?.allowMultiple ? (
-                <Checkbox.Group style={{ width: "100%" }}>
-                  <RenderOptions />
-                </Checkbox.Group>
-              ) : (
-                <Radio.Group
-                  onChange={handleOptionChange}
-                  value={selectedOptions[0]}
-                  style={{ width: "100%" }}
-                >
-                  <RenderOptions />
-                </Radio.Group>
-              )}
-            </Col>
-          </div>
+          <Paragraph
+            style={{
+              lineHeight: "1.00",
+              padding: "10px",
+              // paddingLeft: "10px",
+              // padding: "5px 5px 20px 5px",
+            }}
+          >
+            <small>{alldata?.data?.question ?? "Question"}</small>
+          </Paragraph>
+
+          <Col span={24}>
+            {alldata?.data?.allowMultiple ? (
+              <Checkbox.Group style={{ width: "100%" }}>
+                <RenderOptions />
+              </Checkbox.Group>
+            ) : (
+              <Radio.Group
+                onChange={handleOptionChange}
+                value={selectedOptions[0]}
+                style={{ width: "100%", padding: "8px" }}
+              >
+                <RenderOptions />
+              </Radio.Group>
+            )}
+          </Col>
+        </div>
         {/* </Card> */}
       </div>
 
