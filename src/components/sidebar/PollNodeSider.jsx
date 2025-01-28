@@ -14,10 +14,11 @@ import {
   Typography,
 } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import { setUpdateNodeData } from "../../redux/nodesSlice";
 import TextEditor from "../Node/Texteditor";
+import Dragger from "antd/es/upload/Dragger";
 const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
   const dispatch = useDispatch();
   const nodes = useSelector((state) => state.nodes.nodes);
@@ -28,6 +29,8 @@ const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
   const [question, setQuestion] = useState(alldata?.data?.question ?? "");
   const [editingCardId, setEditingCardId] = useState(null);
   const [message1, setMessage] = useState(alldata?.data?.question ?? "");
+  const [imageUrl, setImageUrl] = useState(alldata?.data?.mediaUrl ?? "");
+  const [loading, setLoading] = useState(false);
 
   const [templateName, setTemplateName] = useState(
     alldata?.data?.templateName ?? ""
@@ -172,6 +175,53 @@ const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
       message.warning("At least 2 options are required");
     }
   };
+  const props = {
+    name: "file",
+    multiple: false,
+    onChange(info) {
+      const { status } = info.file;
+      if (status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (status === "done") {
+        setImageUrl(info.file);
+        const value = info.file.response.url;
+        const data = { selectedNode, value, key: "mediaUrl" };
+        dispatch(setUpdateNodeData(data));
+        message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
+
+  const customUpload = ({ file, onSuccess, onError }) => {
+    setTimeout(() => {
+      if (file) {
+        onSuccess({ url: URL.createObjectURL(file) });
+      } else {
+        onError(new Error("Upload failed"));
+      }
+    }, 1000);
+  };
+  const uploadButton = (
+    <button
+      style={{
+        border: 0,
+        background: "none",
+      }}
+      type="button"
+    >
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </button>
+  );
   const inputRef = useRef(null);
   const toggleEditMode = () => {
     setIsEditing(true);
@@ -224,6 +274,31 @@ const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
             </Badge.Ribbon>
           </Col>
         </Row>
+        <Form.Item
+          label={
+            <>
+              Media{" "}
+              <Typography.Text type="secondary">(Optional)</Typography.Text>
+            </>
+          }
+          required={false}
+        >
+          <Dragger {...props} customRequest={customUpload}>
+            {imageUrl ? (
+              <img
+                src={imageUrl?.response?.url || imageUrl}
+                alt="avatar"
+                style={{
+                  objectFit: "scale-down",
+                  width: "100%",
+                  height: 50,
+                }}
+              />
+            ) : (
+              uploadButton
+            )}
+          </Dragger>
+        </Form.Item>
         <Form.Item label="Poll Question">
           <TextEditor
             value={message1}
