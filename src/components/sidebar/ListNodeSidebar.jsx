@@ -1,4 +1,9 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  LoadingOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import {
   Badge,
   Button,
@@ -15,6 +20,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUpdateNodeData } from "../../redux/nodesSlice";
+import Dragger from "antd/es/upload/Dragger";
 
 function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
   const [form] = Form.useForm();
@@ -50,12 +56,15 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
 
   const [editingCardId, setEditingCardId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [imageUrl, setImageUrl] = useState(alldata?.data?.mediaUrl ?? "");
+  const [loading] = useState(false);
 
   useEffect(() => {
     if (alldata) {
       setTemplateName(alldata.data?.templateName ?? "List Message");
       setMiddleTitle(alldata.data?.middleTitle ?? "Menu Middle Title");
       setMenuTitle(alldata.data?.menuTitle ?? "Header Title");
+      setImageUrl(alldata?.data?.imageUrl ?? "");
       setFooterTitle(alldata.data?.footerTitle ?? "Footer Title");
       setData({
         actions: Array.isArray(alldata.data?.actions)
@@ -157,6 +166,55 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
     dispatch(setUpdateNodeData(data));
   };
 
+  const uploadButton = (
+    <button
+      style={{
+        border: 0,
+        background: "none",
+      }}
+      type="button"
+    >
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </button>
+  );
+
+  const props = {
+    name: "file",
+    multiple: false,
+    onChange(info) {
+      const { status } = info.file;
+      if (status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (status === "done") {
+        setImageUrl(info.file);
+        const value = info.file.response.url;
+        const data = { selectedNode, value, key: "mediaUrl" };
+        dispatch(setUpdateNodeData(data));
+        message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
+
+  const customUpload = ({ file, onSuccess, onError }) => {
+    setTimeout(() => {
+      if (file) {
+        onSuccess({ url: URL.createObjectURL(file) });
+      } else {
+        onError(new Error("Upload failed"));
+      }
+    }, 1000);
+  };
+
   return (
     <ConfigProvider
       theme={{
@@ -228,6 +286,32 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
             onChange={handleFooterTitleChange}
             // onChange={(e) => setFooterTitle(e.target.value)}
           />
+        </Form.Item>
+
+        <Form.Item
+          label={
+            <>
+              Media{" "}
+              <Typography.Text type="secondary">(Optional)</Typography.Text>
+            </>
+          }
+          required={false}
+        >
+          <Dragger {...props} customRequest={customUpload}>
+            {imageUrl ? (
+              <img
+                src={imageUrl?.response?.url || imageUrl}
+                alt="avatar"
+                style={{
+                  objectFit: "scale-down",
+                  width: "100%",
+                  height: 50,
+                }}
+              />
+            ) : (
+              uploadButton
+            )}
+          </Dragger>
         </Form.Item>
 
         <Flex justify="space-between" align="center">
