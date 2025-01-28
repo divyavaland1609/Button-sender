@@ -14,7 +14,12 @@ import {
   Typography,
 } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  LoadingOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import { setUpdateNodeData } from "../../redux/nodesSlice";
 import TextEditor from "../Node/Texteditor";
@@ -229,7 +234,17 @@ const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
       inputRef.current?.focus();
     }, 0);
   };
+  const handleDelete = () => {
+    setImageUrl(null);
 
+    dispatch(
+      setUpdateNodeData({
+        selectedNode: selectedNode,
+        key: "mediaUrl",
+        value: null,
+      })
+    );
+  };
   return (
     <ConfigProvider
       theme={{
@@ -283,7 +298,11 @@ const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
           }
           required={false}
         >
-          <Dragger {...props} customRequest={customUpload}>
+          <Dragger
+            {...props}
+            customRequest={customUpload}
+            showUploadList={false}
+          >
             {imageUrl ? (
               <img
                 src={imageUrl?.response?.url || imageUrl}
@@ -298,6 +317,18 @@ const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
               uploadButton
             )}
           </Dragger>
+          {imageUrl && (
+            <DeleteOutlined
+              style={{
+                position: "absolute",
+                top: 6,
+                right: 6,
+                color: "red",
+                cursor: "pointer",
+              }}
+              onClick={handleDelete} // Delete handler
+            />
+          )}
         </Form.Item>
         <Form.Item label="Poll Question">
           <TextEditor
