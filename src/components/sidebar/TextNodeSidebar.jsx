@@ -169,31 +169,31 @@ const TextNodeSidebar = ({ setSelectedNode, title, selectedNode }) => {
             value={templateName}
           />
         </Form.Item> */}
-        {/* <Form.Item
-              label={
-                <>
-                  Media{" "}
-                  <Typography.Text type="secondary">(Optional)</Typography.Text>
-                </>
-              }
-              required={false}
-            >
-              <Dragger {...props} customRequest={customUpload}>
-                {imageUrl ? (
-                  <img
-                    src={imageUrl?.response?.url || imageUrl}
-                    alt="avatar"
-                    style={{
-                      objectFit: "scale-down",
-                      width: "100%",
-                      height: 50,
-                    }}
-                  />
-                ) : (
-                  uploadButton
-                )}
-              </Dragger>
-            </Form.Item> */}
+        <Form.Item
+          label={
+            <>
+              Media{" "}
+              <Typography.Text type="secondary">(Optional)</Typography.Text>
+            </>
+          }
+          required={false}
+        >
+          <Dragger {...props} customRequest={customUpload}>
+            {imageUrl ? (
+              <img
+                src={imageUrl?.response?.url || imageUrl}
+                alt="avatar"
+                style={{
+                  objectFit: "scale-down",
+                  width: "100%",
+                  height: 50,
+                }}
+              />
+            ) : (
+              uploadButton
+            )}
+          </Dragger>
+        </Form.Item>
         <Form.Item label="Message">
           <TextEditor
             value={message1}
