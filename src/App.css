@@ -1083,6 +1083,3 @@ div:where(.css-dev-only-do-not-override-tqzgtm).ant-typography, :where(.css-dev-
   vertical-align: middle;
   margin-bottom: -6px;
 }
-:where(.css-dev-only-do-not-override-1owjiii).ant-row-middle {
-  align-items: baseline;
-}

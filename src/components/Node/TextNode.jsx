@@ -7,6 +7,7 @@ import {
   ConfigProvider,
   Dropdown,
   Flex,
+  Image,
   Switch,
   Typography,
 } from "antd";
@@ -67,7 +68,7 @@ const TextNode = ({ data, selected }) => {
   console.log("media data-->", alldata);
 
   const isConnected = isNodeConnected(id);
-  
+
   useEffect(() => {
     const connectedToStart = checkParentNodesForStart(id);
     setIsConnectedToStartNode(connectedToStart);
@@ -138,7 +139,6 @@ const TextNode = ({ data, selected }) => {
       ? "0 0 10px rgba(82, 196, 26, 0.9)"
       : "none",
   };
-
 
   const items = [
     alldata?.data?.isStartNode
@@ -277,44 +277,61 @@ const TextNode = ({ data, selected }) => {
           style={{
             background: "rgba(255, 255, 255, 0.8)",
             borderRadius: "12px",
-            width: "210px",
+            width: "200px",
           }}
         >
-         <Handle
-              type={
-                alldata?.data?.isStartNode || data.isStartNode
-                  ? "source"
-                  : "target"
-              }
-              position={
-                alldata?.data?.isStartNode ? Position.Right : Position.Left
-              }
-              isConnectable={enabled}
-              style={{
-                background: "transparent",
-                position: "absolute",
-                width: "20px",
-                left: alldata?.data?.isStartNode ? "auto" : "-3px",
-                right: alldata?.data?.isStartNode ? "-3px" : "auto",
-                border: "none",
-                top: "58%",
-                height: "50px",
-                zIndex: 10,
-                transform: "translateY(-50%)",
-              }}
-            />
-            <div
-              style={{
-                height: "6px",
-                display: "flex",
-                position: "relative",
-                alignItems: "center",
-                justifyContent: "center",
-                top: "15px",
-                left: alldata?.data?.isStartNode ? "auto" : "-106px",
-                right: alldata?.data?.isStartNode ? "-100px" : "auto",
-              }}
-            >
+          {alldata?.data?.mediaUrl?(
+               <Image
+               style={{
+                 height: "100px",
+                 marginTop: "3px",
+                 borderRadius: "14px",
+                 objectFit: "cover",
+                 width: "200px",
+               }}
+               src={
+                 alldata?.data?.mediaUrl ||
+                 "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
+               }
+               alt="Media not found"
+               preview={false}
+             />
+             ):null}
+          <Handle
+            type={
+              alldata?.data?.isStartNode || data.isStartNode
+                ? "source"
+                : "target"
+            }
+            position={
+              alldata?.data?.isStartNode ? Position.Right : Position.Left
+            }
+            isConnectable={enabled}
+            style={{
+              background: "transparent",
+              position: "absolute",
+              width: "20px",
+              left: alldata?.data?.isStartNode ? "auto" : "-3px",
+              right: alldata?.data?.isStartNode ? "-3px" : "auto",
+              border: "none",
+              top: "58%",
+              height: "50px",
+              zIndex: 10,
+              transform: "translateY(-50%)",
+            }}
+          />
+          <div
+            style={{
+              height: "6px",
+              display: "flex",
+              position: "relative",
+              alignItems: "center",
+              justifyContent: "center",
+              top: "15px",
+              left: alldata?.data?.isStartNode ? "auto" : "-106px",
+              right: alldata?.data?.isStartNode ? "-100px" : "auto",
+            }}
+          >
             {data?.isStartNode || alldata?.data?.isStartNode ? (
               <>
                 {isConnected ? (
