@@ -340,7 +340,7 @@ const ButtonNode = ({ data, selected }) => {
           style={{
             background: "rgba(255, 255, 255, 0.8)",
             borderRadius: "12px",
-            width: "210px",
+            width: "200px",
           }}
         >
           {alldata?.data?.isStartNode || data.isStartNode ? null : (
@@ -394,17 +394,7 @@ const ButtonNode = ({ data, selected }) => {
               alt="Media not found"
               preview={false}
             />
-          ) : // <Image
-          //   alt="Node Media"
-          //   style={{
-          //     width: "100%",
-          //     height: "auto",
-          //     objectFit: "cover",
-          //     borderRadius: "10px",
-          //     marginTop: "10px",
-          //   }}
-          //   src={alldata?.data?.mediaUrl}
-          // />
+          ) : 
           null}
           <Paragraph
             style={{

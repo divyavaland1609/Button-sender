@@ -227,7 +227,16 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
       inputRef.current?.focus();
     }, 0);
   };
-
+  const handleDelete = () => {
+    setImageUrl(null);
+    dispatch(
+      setUpdateNodeData({
+        selectedNode: selectedNode,
+        key: "mediaUrl",
+        value: null,
+      })
+    );
+  };
   return (
     // <ProLayout
     //   collapsedButtonRender={false}
@@ -295,7 +304,11 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
           }
           required={false}
         >
-          <Dragger {...props} customRequest={customUpload} showUploadList={false}>
+          <Dragger
+            {...props}
+            customRequest={customUpload}
+            showUploadList={false}
+          >
             {imageUrl ? (
               <img
                 src={imageUrl?.response?.url || imageUrl}
@@ -310,6 +323,18 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
               uploadButton
             )}
           </Dragger>
+          {imageUrl && (
+            <DeleteOutlined
+              style={{
+                position: "absolute",
+                top: 6,
+                right: 6,
+                color: "red",
+                cursor: "pointer",
+              }}
+              onClick={handleDelete} // Delete handler
+            />
+          )}
         </Form.Item>
         <Form.Item label="Message" name="label">
           <TextEditor
