@@ -64,7 +64,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
       setTemplateName(alldata.data?.templateName ?? "List Message");
       setMiddleTitle(alldata.data?.middleTitle ?? "Menu Middle Title");
       setMenuTitle(alldata.data?.menuTitle ?? "Header Title");
-      setImageUrl(alldata?.data?.imageUrl ?? "");
+      // setImageUrl(alldata?.data?.imageUrl ?? "");
       setFooterTitle(alldata.data?.footerTitle ?? "Footer Title");
       setData({
         actions: Array.isArray(alldata.data?.actions)
@@ -215,6 +215,17 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
     }, 1000);
   };
 
+  const handleDelete = () => {
+    setImageUrl(null);
+    dispatch(
+      setUpdateNodeData({
+        selectedNode: selectedNode,
+        key: "mediaUrl",
+        value: null,
+      })
+    );
+  };
+
   return (
     <ConfigProvider
       theme={{
@@ -297,7 +308,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
           }
           required={false}
         >
-          <Dragger {...props} customRequest={customUpload}>
+          <Dragger {...props} customRequest={customUpload} showUploadList={false}>
             {imageUrl ? (
               <img
                 src={imageUrl?.response?.url || imageUrl}
@@ -312,6 +323,18 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
               uploadButton
             )}
           </Dragger>
+          {imageUrl && (
+            <DeleteOutlined
+              style={{
+                position: "absolute",
+                top: 6,
+                right: 6,
+                color: "red",
+                cursor: "pointer",
+              }}
+              onClick={handleDelete} // Delete handler
+            />
+          )}
         </Form.Item>
 
         <Flex justify="space-between" align="center">

@@ -10,6 +10,7 @@ import {
   Button,
   Dropdown,
   Flex,
+  Image,
 } from "antd";
 import {
   ArrowRightOutlined,
@@ -391,7 +392,7 @@ const ListNode = ({ data, selected }) => {
             style={{
               background: "rgba(255, 255, 255, 0.8)",
               borderRadius: "12px",
-              width: "210px",
+              width: "200px",
             }}
           >
             <Handle
@@ -448,6 +449,24 @@ const ListNode = ({ data, selected }) => {
                 </>
               )}
             </div>
+            {alldata?.data?.mediaUrl ? (
+            <Image
+              style={{
+                height: "100px",
+                marginTop: "3px",
+                borderRadius: "14px",
+                objectFit: "cover",
+                width: "200px",
+              }}
+              src={
+                alldata?.data?.mediaUrl ||
+                "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
+              }
+              alt="Media not found"
+              preview={false}
+            />
+          ) : 
+          null}
             <Typography>
               <Title
                 level={5}
