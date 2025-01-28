@@ -9,6 +9,7 @@ import {
   Divider,
   Dropdown,
   Flex,
+  Image,
   Switch,
   Typography,
 } from "antd";
@@ -50,7 +51,7 @@ const ButtonNode = ({ data, selected }) => {
   const alldata = nodes.find((item) => item.id === id);
   const [enabled, setEnabled] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
-  
+
   const [isConnectedToStartNode, setIsConnectedToStartNode] = useState(false);
   const checkParentNodesForStart = (nodeId) => {
     const parentEdges = edges.filter((edge) => edge.target === nodeId);
@@ -378,18 +379,33 @@ const ButtonNode = ({ data, selected }) => {
             </>
           )}
           {alldata?.data?.mediaUrl ? (
-            <img
-              alt="Node Media"
+            <Image
               style={{
-                width: "100%",
-                height: "auto",
+                height: "100px",
+                marginTop: "3px",
+                borderRadius: "14px",
                 objectFit: "cover",
-                borderRadius: "10px",
-                marginTop: "10px",
+                width: "200px",
               }}
-              src={alldata?.data?.mediaUrl}
+              src={
+                alldata?.data?.mediaUrl ||
+                "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
+              }
+              alt="Media not found"
+              preview={false}
             />
-          ) : null}
+          ) : // <Image
+          //   alt="Node Media"
+          //   style={{
+          //     width: "100%",
+          //     height: "auto",
+          //     objectFit: "cover",
+          //     borderRadius: "10px",
+          //     marginTop: "10px",
+          //   }}
+          //   src={alldata?.data?.mediaUrl}
+          // />
+          null}
           <Paragraph
             style={{
               padding: "10px 10px 0px 10px",
@@ -405,11 +421,7 @@ const ButtonNode = ({ data, selected }) => {
             <>
               {alldata?.data?.actions?.map((btn, i) => (
                 <React.Fragment key={i}>
-                  <Button
-                    className="btn"
-                    size="small"
-                    block
-                    type="text">
+                  <Button className="btn" size="small" block type="text">
                     {btn.type === "quick" && (
                       // <Handle
                       //   type="source"

@@ -295,7 +295,7 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
           }
           required={false}
         >
-          <Dragger {...props} customRequest={customUpload}>
+          <Dragger {...props} customRequest={customUpload} showUploadList={false}>
             {imageUrl ? (
               <img
                 src={imageUrl?.response?.url || imageUrl}
