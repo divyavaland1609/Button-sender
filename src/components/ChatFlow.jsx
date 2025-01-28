@@ -356,6 +356,8 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                 display: "flex",
                 flexDirection: "column",
                 fontWeight: "bold",
+                lineHeight:"1.2"
+
               }}
               className="message-text"
               dangerouslySetInnerHTML={{
@@ -368,6 +370,8 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
               style={{
                 display: "flex",
                 flexDirection: "column",
+                lineHeight:"1.2"
+
               }}
               className="message-text"
               dangerouslySetInnerHTML={{
@@ -380,6 +384,8 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
               style={{
                 display: "flex",
                 flexDirection: "column",
+                lineHeight:"1.2"
+
               }}
               className="message-text"
               dangerouslySetInnerHTML={{

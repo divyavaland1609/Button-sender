@@ -286,10 +286,10 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
           </Col>
         </Row>
 
-        {/* <Form.Item
+        <Form.Item
           label={
             <>
-              Media optional{" "}
+              Media{" "}
               <Typography.Text type="secondary">(Optional)</Typography.Text>
             </>
           }
@@ -310,7 +310,7 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
               uploadButton
             )}
           </Dragger>
-        </Form.Item> */}
+        </Form.Item>
         <Form.Item label="Message" name="label">
           <TextEditor
             className="ql-editor"

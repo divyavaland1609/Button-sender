@@ -217,14 +217,13 @@ function Sidebar({ collapsed }) {
       bgColor: "#878D98",
       icons: <PlusOutlined style={{ fontSize: "20px" }} />,
     },
-    {
-     
-      id: 3,
-      name: "Richcard",
-      type: "richcard",
-      bgColor: "#F2AF41",
-      icons: <BarChartOutlined style={{ fontSize: "20px" }} />,
-    },
+    // {
+    //   id: 3,
+    //   name: "Richcard",
+    //   type: "richcard",
+    //   bgColor: "#F2AF41",
+    //   icons: <BarChartOutlined style={{ fontSize: "20px" }} />,
+    // },
     { id: 4,
       name: "Poll",
       type: "poll",
