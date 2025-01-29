@@ -34,6 +34,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
   const [open, setOpen] = useState(false);
   const [currentNodeId, setCurrentNodeId] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  console.log("chats",chats)
 
   const chatContainerRef = useRef(null);
   useEffect(() => {
@@ -59,12 +60,12 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
     }
   }, [nodeData]);
 
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
-    }
-  }, [chats]);
+  // useEffect(() => {
+  //   if (chatContainerRef.current) {
+  //     chatContainerRef.current.scrollTop =
+  //       chatContainerRef.current.scrollHeight;
+  //   }
+  // }, [chats]);
 
   // Find the next node based on the edges array
   const getNextNode = (currentNodeId, type, handle) => {
@@ -109,6 +110,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
         role: "user",
       },
     ]);
+    
     const nextNode = getNextNode(currentNodeId, type, handle);
     if (nextNode) {
       setCurrentNodeId(nextNode.data.id);
@@ -124,6 +126,22 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
         },
       ]);
     }
+  };
+
+  // handle open drawer 
+
+  const handleDrawerOpen = () => {
+   const update =  chats?.find((item)=>item?.type==="list");
+   console.log("update", update);
+   if(update){
+    setChats((prev)=>([
+      ...prev,{
+        ...update,
+         drawer:true
+      }
+    ]))
+   }
+
   };
 
   const RenderOptions = ({ item }) => {
@@ -172,9 +190,8 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
       </Fragment>
     ));
   };
-
   const handleOpen = () => {
-    setOpen(true);
+    setOpen(true); 
   };
 
   const handleClose = () => {
@@ -185,7 +202,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
     {
       console.log("type-->", item?.originData?.type);
     }
-    switch (item?.originData?.type) {
+    switch (item?.originData?.type===undefined ? "list":item?.originData?.type ) {
       case "button":
         return (
           <div className="chat-message button-message">
@@ -288,34 +305,33 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
         return (
           <div className="chat-message media-message">
             {/* <Card title={item?.originData?.label} bordered={false}> */}
-              <div
-                style={{
-                  padding: "0px 0px 0px 0px",
-                }}
-                className="message-text"
-                dangerouslySetInnerHTML={{
-                  __html:
-                    item?.originData?.question?.replace(/\n/g, "<br/>") ||
-                    "question",
-                }}
-              />
-              {item?.originData?.allowMultiple ? (
-                <Checkbox.Group style={{ width: "100%" }}>
-                  <RenderOptions item={item} />
-                </Checkbox.Group>
-              ) : (
-                <Radio.Group
-                  onChange={handleOptionChange}
-                  value={selectedOptions[0]}
-                  style={{ width: "100%" }}
-                >
-                  <RenderOptions item={item} />
-                </Radio.Group>
-              )}
+            <div
+              style={{
+                padding: "0px 0px 0px 0px",
+              }}
+              className="message-text"
+              dangerouslySetInnerHTML={{
+                __html:
+                  item?.originData?.question?.replace(/\n/g, "<br/>") ||
+                  "question",
+              }}
+            />
+            {item?.originData?.allowMultiple ? (
+              <Checkbox.Group style={{ width: "100%" }}>
+                <RenderOptions item={item} />
+              </Checkbox.Group>
+            ) : (
+              <Radio.Group
+                onChange={handleOptionChange}
+                value={selectedOptions[0]}
+                style={{ width: "100%" }}
+              >
+                <RenderOptions item={item} />
+              </Radio.Group>
+            )}
             {/* </Card> */}
           </div>
         );
-
 
       case "Text":
         return (
@@ -340,8 +356,8 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
             />
           </div>
         );
-      
-        case "list":
+
+      case "list":
         return (
           <div
             className={`chat-message ${
@@ -350,14 +366,13 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                 : "text-message"
             }`}
           >
-            {console.log("33-->", item?.originData)}
+            {/* Message Title */}
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
                 fontWeight: "bold",
-                lineHeight:"1.2"
-
+                lineHeight: "1.2",
               }}
               className="message-text"
               dangerouslySetInnerHTML={{
@@ -366,12 +381,12 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                   "message",
               }}
             />
+            {/* Middle Title */}
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
-                lineHeight:"1.2"
-
+                lineHeight: "1.2",
               }}
               className="message-text"
               dangerouslySetInnerHTML={{
@@ -380,12 +395,12 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                   "message",
               }}
             />
+            {/* Footer Title */}
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
-                lineHeight:"1.2"
-
+                lineHeight: "1.2",
               }}
               className="message-text"
               dangerouslySetInnerHTML={{
@@ -394,49 +409,38 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                   "message",
               }}
             />
-            {Array.isArray(item?.originData?.actions) ? (
+            {Array.isArray(item?.originData?.actions) && (
               <Divider style={{ margin: "0px" }} />
-            ) : (
-              ""
             )}
-            <Button
-              size="small"
-              block
-              type="text"
-              onClick={() => {
-               console.log("button clicked"), 
-               handleOpen(),
-               console.log("button clicked2")
+            {/* Button */}
+            <div>
+              <Button onClick={handleOpen} type="primary">
+                Open Drawer
+              </Button>
+              <button onClick={()=>handleDrawerOpen()}>checked</button>
 
-              }}
-            >
-              <MessageOutlined
-                onClick={() => {
-                  message("Message"), handleOpen();
+              {/* Ensure Drawer visibility */}
+              <Drawer
+                title="Basic Drawer"
+                placement="top" // Placement ko change karke "top", "left", "right" try karen
+                closable={true}
+                onClose={handleClose}
+                open={open}
+                width={400} // Optional: adjust width if needed
+                getContainer={false}
+                style={{
+                  zIndex: 4050,
+                  position: "fixed", // Ensure it stays fixed on screen
                 }}
-              />
-              List
-            </Button>
-            <Drawer
-              title="Basic Drawer"
-              // placement="bottom"
-              // closable={true}
-              onClose={handleClose} // Use a callback reference
-              open={open} // Controlled by state
-              // key="bottom"
-              style={{ background: "red" }}
-            >
-              <p>Some contents...</p>
-              <p>Some contents...</p>
-              <p>Some contents...</p>
-            </Drawer>
-            {/* {Array.isArray(item.originData.actions) &&
-              item.originData.actions.length > 1 && (
-                <Divider style={{ margin: "0px" }} />
-              )} */}
+              >
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+              </Drawer>
+            </div>
           </div>
         );
-        
+
       default:
         return (
           <div className="chat-message text-message">
@@ -518,10 +522,13 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
         </div>
       </div>
 
+        
+
       <ProChat
         locale="en-US"
         chats={chats}
         onChatsChange={(chats) => {
+          console.log("check chats",chats)
           setChats(chats);
         }}
         inputAreaRender={() => {
@@ -530,7 +537,9 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
         chatItemRenderConfig={{
           actionsRender: false,
           render: (item) => {
-            return <div ref={chatContainerRef}>{renderChatContent(item)}</div>;
+            console.log("item",item)
+            // return <div ref={chatContainerRef}>{renderChatContent(item)}</div>;
+            return <div>{renderChatContent(item)}</div>;
           },
         }}
       />

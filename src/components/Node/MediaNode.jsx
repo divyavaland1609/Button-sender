@@ -394,7 +394,7 @@ function MediaNode({ data, selected }) {
                 position: "relative",
                 alignItems: "center",
                 justifyContent: "center",
-                top: "-10px",
+                top: "-28px",
                 left: alldata?.data?.isStartNode ? "auto" : "-106px",
                 right: alldata?.data?.isStartNode ? "-100px" : "auto",
               }}

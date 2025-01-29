@@ -213,13 +213,12 @@ const DnDFlow = () => {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-
   useEffect(() => {
     if (!selectedNode) {
       setActiveTab("1");
     }
   }, [selectedNode]);
-  
+
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -258,7 +257,6 @@ const DnDFlow = () => {
     },
     [dispatch, nodeData.length, screenToFlowPosition, setNodes, type]
   );
-
 
   const onNodeClick = (event, node) => {
     event.stopPropagation();
@@ -484,16 +482,16 @@ const DnDFlow = () => {
             setSelectedNode={setSelectedNode}
           />
         );
-        case "richcard":
-          return (
-            <div className="sidebar">
-              <RichcardNodeSidebar
-                title={"Rich Card"}
-                selectedNode={selectedNode}
-                setSelectedNode={setSelectedNode}
-              />
-            </div>
-          );
+      case "richcard":
+        return (
+          <div className="sidebar">
+            <RichcardNodeSidebar
+              title={"Rich Card"}
+              selectedNode={selectedNode}
+              setSelectedNode={setSelectedNode}
+            />
+          </div>
+        );
       case "poll":
         return (
           <PollNodeSider
@@ -740,8 +738,7 @@ const DnDFlow = () => {
                   }))}
                   // nodes={nodes}
                   edges={edges}
-                  edgeTypes={{ custom:CustomEdge }}
-
+                  edgeTypes={{ custom: CustomEdge }}
                   onNodesChange={onNodesChange}
                   onEdgesChange={onEdgesChange}
                   onConnect={onConnect}
@@ -765,7 +762,7 @@ const DnDFlow = () => {
                   <div>
                     <Controls />
                   </div>
-    
+
                   <Background />
                 </ReactFlow>
 
@@ -802,7 +799,6 @@ const DnDFlow = () => {
                         top: "-480px",
                         right: "60px",
                         borderRadius: 10,
-                        // boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
                         width: 300,
                         zIndex: 10,
                         flexDirection: "column",
@@ -811,6 +807,25 @@ const DnDFlow = () => {
                       }}
                     />
                   )}
+
+                  {/* {isTestRunning && (
+                    <ChatFlow
+                      nodeData={nodeData}
+                      edges={edges}
+                      styles={{
+                        position: "absolute",
+                        top: "-480px",
+                        right: "60px",
+                        borderRadius: 10,
+                        // boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+                        width: 300,
+                        zIndex: 10,
+                        flexDirection: "column",
+                        alignItems: "end",
+                        height: 430,
+                      }}
+                    />
+                  )} */}
                 </Panel>
               </div>
             </div>
