@@ -13,6 +13,9 @@ import {
   Image,
   Drawer,
   theme,
+  Radio,
+  Row,
+  Col,
 } from "antd";
 import {
   ArrowRightOutlined,
@@ -577,19 +580,26 @@ const ListNode = ({ data, selected }) => {
                 onClose={onClose}
                 mask={false}
                 getContainer={false}
-                
               >
                 {alldata?.data?.actions?.map((action, i) => (
                   <div key={i}>
-                    <Text
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        fontSize: "11px",
-                      }}
-                    >
-                      {action.title || `List ${i + 1}`}
-                    </Text>
+                    <Row align="middle" justify="space-between">
+                      <Col md={22} align="left">
+                        <Text
+                          style={{
+                            // display: "flex",
+                            justifyContent: "center",
+                            fontSize: "11px",
+                          }}
+                        >
+                          {action.title || `List ${i + 1}`}
+                        </Text>
+                      </Col>
+                      <Col md={2}>
+                        <Radio> </Radio>
+                      </Col>
+                    </Row>
+
                     {i < alldata?.data?.actions.length - 1 && (
                       <Divider style={{ margin: 5 }} />
                     )}
