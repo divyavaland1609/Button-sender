@@ -56,7 +56,7 @@ function PollNode({ data, selected }) {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [isConnectedToStartNode, setIsConnectedToStartNode] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-
+  const[checked,setChecked] = useState(false);
   useEffect(() => {
     if (alldata?.data?.allowMultiple) {
       setSelectedOptions([]);
@@ -84,7 +84,6 @@ function PollNode({ data, selected }) {
 
   const handleOptionChange = (e) => {
     const value = e.target.value;
-
     if (alldata?.data?.allowMultiple) {
       setSelectedOptions((prev) =>
         prev.includes(value)
@@ -181,17 +180,13 @@ function PollNode({ data, selected }) {
       : "none",
   };
 
-  // if (!isConnected) {
-  //   nodeStyle.opacity = 1; // Always fully visible if not connected
-  //   nodeStyle.pointerEvents = "auto"; // Allow interactions
-  // }
   const RenderOptions = () => {
     return alldata?.data?.answers?.map(({ value, label }, index) => (
       <Fragment key={index}>
         <Row
           style={{
             width: "100%",
-            padding: "10px",
+            padding: "0px 10px 0px 10px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -222,10 +217,10 @@ function PollNode({ data, selected }) {
         </Row>
         <Progress
           showInfo={false}
-          percent={32}
+          percent={selectedOptions.includes(label) ? 100 : 0}
           strokeColor={selectedOptions.includes(label) ? "#00313e" : "#87d068"}
           strokeWidth={10}
-          style={{ marginBottom: "8px" }}
+          style={{ marginBottom: "8px", padding: "0px 10px 0px 10px" }}
         />
       </Fragment>
     ));
@@ -611,22 +606,94 @@ function PollNode({ data, selected }) {
           >
             <small>{alldata?.data?.question ?? "Question"}</small>
           </Paragraph>
-
-          <Col span={24}>
-            {alldata?.data?.allowMultiple ? (
-              <Checkbox.Group style={{ width: "100%" }}>
-                <RenderOptions />
-              </Checkbox.Group>
-            ) : (
-              <Radio.Group
-                onChange={handleOptionChange}
-                value={selectedOptions[0]}
-                style={{ width: "100%", padding: "8px" }}
+          {alldata?.data?.answers ? (
+            <Col span={24}>
+              {alldata?.data?.allowMultiple ? (
+                <Checkbox.Group style={{ width: "100%" }}>
+                  <RenderOptions />
+                </Checkbox.Group>
+              ) : (
+                <Radio.Group
+                  onChange={handleOptionChange}
+                  value={selectedOptions[0]}
+                  style={{ width: "100%", padding: "8px" }}
+                >
+                  <RenderOptions />
+                </Radio.Group>
+              )}
+            </Col>
+          ) : (
+            <>
+              <Row
+                style={{
+                  width: "100%",
+                  padding: "0px 10px 0px 10px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
               >
-                <RenderOptions />
-              </Radio.Group>
-            )}
-          </Col>
+                <Col>
+                  {/* {alldata?.data?.allowMultiple ? (
+                <Checkbox
+                  value={label}
+                  checked={selectedOptions.includes(label)}
+                  onChange={handleOptionChange}
+                >
+                  {value ?? `option-${index + 1}`}
+                </Checkbox>
+              ) : ( */}
+                  <Radio
+                    // value={label}
+                    // checked={selectedOptions[0] === label}
+                    onChange={handleOptionChange}
+                  >
+                    {`option 1`}
+                  </Radio>
+                  {/* )} */}
+                </Col>
+                <Col>
+                  <Avatar icon={<UserOutlined />} size="small" />
+                </Col>
+              </Row>
+              <Progress
+                showInfo={false}
+                percent={0}
+                strokeColor={"#87d068"}
+                strokeWidth={10}
+                style={{ marginBottom: "8px", padding: "0px 10px 0px 10px" }}
+              />
+              <Row
+                style={{
+                  width: "100%",
+                  padding: "0px 10px 0px 10px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Col>
+                 
+                  <Radio
+                    onChange={handleOptionChange}
+                  >
+                    {`option 2`}
+                  </Radio>
+                  {/* )} */}
+                </Col>
+                <Col>
+                  <Avatar icon={<UserOutlined />} size="small" />
+                </Col>
+              </Row>
+              <Progress
+                showInfo={false}
+                percent={0}
+                strokeColor={"#87d068"}
+                strokeWidth={10}
+                style={{ marginBottom: "8px", padding: "0px 10px 0px 10px" }}
+              />
+            </>
+          )}
         </div>
         {/* </Card> */}
       </div>
