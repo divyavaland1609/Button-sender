@@ -396,7 +396,7 @@ const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
                   <Form.Item label={`Option ${i + 1}`}>
                     <Input
                       placeholder="Enter Poll Answer"
-                      value={option.value}
+                      value={option.value || `Option ${i + 1}`}
                       onChange={(e) => handleChange(i, e.target.value)}
                     />
                   </Form.Item>

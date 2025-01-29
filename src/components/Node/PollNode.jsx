@@ -199,7 +199,7 @@ function PollNode({ data, selected }) {
                 checked={selectedOptions.includes(label)}
                 onChange={handleOptionChange}
               >
-                {value ?? `option-${index + 1}`}
+                {value || `option${index + 1}`}
               </Checkbox>
             ) : (
               <Radio
@@ -207,7 +207,7 @@ function PollNode({ data, selected }) {
                 checked={selectedOptions[0] === label}
                 onChange={handleOptionChange}
               >
-                {value ?? `option-${index + 1}`}
+                {value || `option${index + 1}`}
               </Radio>
             )}
           </Col>
