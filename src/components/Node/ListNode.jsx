@@ -417,7 +417,7 @@ const ListNode = ({ data, selected }) => {
               height: "auto",
             }}
           >
-            <Handle
+            {/* <Handle
               type={
                 alldata?.data?.isStartNode || data.isStartNode
                   ? "source"
@@ -451,6 +451,56 @@ const ListNode = ({ data, selected }) => {
 
                 left: alldata?.data?.isStartNode ? "auto" : "-3px",
                 right: alldata?.data?.isStartNode ? "-3px" : "auto",
+              }}
+            >
+              {data?.isStartNode || alldata?.data?.isStartNode ? (
+                <>
+                  {isConnected ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </>
+              ) : (
+                <>
+                  {isConnectedToStartNode ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </>
+              )}
+            </div> */}
+
+            <Handle
+              type="target"
+              position={Position.Left}
+              isConnectable
+              style={{
+                background: "transparent",
+                position: "absolute",
+                width: "20px",
+                left: alldata?.data?.isStartNode ? "auto" : "-8px",
+                right: alldata?.data?.isStartNode ? "-6px" : "auto",
+                border: "none",
+                top: "64%",
+                height: "50px",
+                zIndex: 10,
+                transform: "translateY(-50%)",
+                visibility: alldata?.data?.isStartNode ? "hidden" : "visible", // Hide left handle if start node
+              }}
+            />
+            <div
+              style={{
+                height: "6px",
+                display: "flex",
+                position: "absolute",
+                alignItems: "center",
+                justifyContent: "center",
+                top: "63%",
+                left: alldata?.data?.isStartNode ? "auto" : "-3px",
+                right: alldata?.data?.isStartNode ? "-3px" : "auto",
+                visibility: alldata?.data?.isStartNode ? "hidden" : "visible", // Hide left badge if start node
               }}
             >
               {data?.isStartNode || alldata?.data?.isStartNode ? (
