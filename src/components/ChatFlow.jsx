@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
 import { ProChat } from "@ant-design/pro-chat";
 import {
   Avatar,
@@ -418,18 +420,18 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
               List
             </Button>
             <Drawer
-              title="Basic Drawer"
-              // placement="bottom"
-              // closable={true}
-              onClose={handleClose} // Use a callback reference
-              open={open} // Controlled by state
-              // key="bottom"
-              style={{ background: "red" }}
-            >
-              <p>Some contents...</p>
-              <p>Some contents...</p>
-              <p>Some contents...</p>
-            </Drawer>
+                title="Drawer Inside Node"
+                placement="bottom"
+                open={open}
+                // onClose={onClose}
+                mask={false} // Prevents overlay issues
+                getContainer={false} // Render inside the node
+                style={{
+                  height: "100px",
+                }}
+              >
+                <p>Node-specific content</p>
+              </Drawer>
             {/* {Array.isArray(item.originData.actions) &&
               item.originData.actions.length > 1 && (
                 <Divider style={{ margin: "0px" }} />

@@ -11,6 +11,8 @@ import {
   Dropdown,
   Flex,
   Image,
+  Drawer,
+  theme,
 } from "antd";
 import {
   ArrowRightOutlined,
@@ -45,6 +47,8 @@ const ListNode = ({ data, selected }) => {
   const [enabled, setEnabled] = useState(true);
   const [isConnectedToStartNode, setIsConnectedToStartNode] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [open, setOpen] = useState(false);
+  const { token } = theme.useToken();
   const checkParentNodesForStart = (nodeId) => {
     const parentEdges = edges.filter((edge) => edge.target === nodeId);
     if (parentEdges.length === 0) return false;
@@ -208,6 +212,23 @@ const ListNode = ({ data, selected }) => {
       ),
     },
   ];
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  const containerStyle = {
+    position: "relative",
+    height: 200,
+    padding: 48,
+    overflow: "hidden",
+    background: token.colorFillAlter,
+    border: `1px solid ${token.colorBorderSecondary}`,
+    borderRadius: token.borderRadiusLG,
+  };
   return (
     <>
       <ConfigProvider
@@ -393,6 +414,7 @@ const ListNode = ({ data, selected }) => {
               background: "rgba(255, 255, 255, 0.8)",
               borderRadius: "12px",
               width: "200px",
+              height: "auto",
             }}
           >
             <Handle
@@ -450,23 +472,22 @@ const ListNode = ({ data, selected }) => {
               )}
             </div>
             {alldata?.data?.mediaUrl ? (
-            <Image
-              style={{
-                height: "100px",
-                marginTop: "3px",
-                borderRadius: "14px",
-                objectFit: "cover",
-                width: "200px",
-              }}
-              src={
-                alldata?.data?.mediaUrl ||
-                "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
-              }
-              alt="Media not found"
-              preview={false}
-            />
-          ) : 
-          null}
+              <Image
+                style={{
+                  height: "100px",
+                  marginTop: "3px",
+                  borderRadius: "14px",
+                  objectFit: "cover",
+                  width: "200px",
+                }}
+                src={
+                  alldata?.data?.mediaUrl ||
+                  "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
+                }
+                alt="Media not found"
+                preview={false}
+              />
+            ) : null}
             <Typography>
               <Title
                 level={5}
@@ -494,7 +515,50 @@ const ListNode = ({ data, selected }) => {
               >
                 {alldata?.data?.footerTitle ?? "Footer Title"}
               </Text>
-              {alldata?.data?.actions?.map((action, i) => (
+
+              <Button onClick={showDrawer} type="text" block>
+                <UnorderedListOutlined />
+                {alldata?.data?.listTitle ?? "List"}
+              </Button>
+              <Drawer
+                title={alldata?.data?.listTitle ?? "List"}
+                placement="bottom"
+                open={open}
+                onClose={onClose}
+                mask={false}
+                getContainer={false}
+                
+              >
+                {alldata?.data?.actions?.map((action, i) => (
+                  <div key={i}>
+                    <Text
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        fontSize: "11px",
+                      }}
+                    >
+                      {action.title || `List ${i + 1}`}
+                    </Text>
+                    {i < alldata?.data?.actions.length - 1 && (
+                      <Divider style={{ margin: 5 }} />
+                    )}
+                  </div>
+                ))}
+              </Drawer>
+
+              {/* <Drawer
+                title="Basic Drawer"
+                placement="bottom"
+                closable={true}
+                onClose={onClose}
+                open={open}
+                getContainer={false}
+              >
+                <p>Some contents...</p>
+              </Drawer> */}
+
+              {/* {alldata?.data?.actions?.map((action, i) => (
                 <>
                   <Text
                     key={i}
@@ -511,7 +575,7 @@ const ListNode = ({ data, selected }) => {
                     <Divider style={{ margin: 5 }} />
                   )}
                 </>
-              ))}
+              ))} */}
             </Typography>
           </div>
           {/* </Card> */}

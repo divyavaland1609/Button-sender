@@ -258,7 +258,7 @@ const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
     >
       <Form form={form} layout="vertical">
         <Row align="middle" justify="center" gutter={[3, 12]}>
-          <Col md={10}>
+          <Col md={12}>
             <Form.Item>
               <Input
                 size="small"
@@ -283,7 +283,7 @@ const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
           >
             <EditOutlined />
           </Col>
-          <Col md={12} style={{ paddingRight: "8px" }}>
+          <Col md={10} style={{ paddingRight: "8px" }}>
             <Badge.Ribbon text="Poll Message" className="badge">
               <div style={{ width: "100%" }}></div>{" "}
             </Badge.Ribbon>

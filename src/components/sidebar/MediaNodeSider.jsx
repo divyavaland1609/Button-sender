@@ -247,7 +247,7 @@ const MediaNodeSider = ({ title, setSelectedNode, selectedNode }) => {
    
         <Col md={24}>
           <Form.Item label="Media" required>
-            <Dragger {...props} customRequest={customUpload}>
+            <Dragger {...props} customRequest={customUpload} showUploadList={false}>
               {imageUrl ? (
                 <img
                   src={imageUrl?.response?.url || imageUrl}

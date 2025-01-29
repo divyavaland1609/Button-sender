@@ -203,7 +203,7 @@ function Sidebar({ collapsed }) {
       name: "Text",
       type: "Text",
       twoToneColor: "#878D98",
-      bgColor: "#F53F5F",
+      bgColor: "#878D98",
       icons: (
         <FileTextOutlined
           style={{ fontSize: "20px", backgroundColor: "#F53F5F !important" }}
@@ -214,7 +214,7 @@ function Sidebar({ collapsed }) {
       id: 2,
       name: "Button",
       type: "button",
-      bgColor: "#878D98",
+      bgColor: " #F53F5F",
       icons: <PlusOutlined style={{ fontSize: "20px" }} />,
     },
     // {

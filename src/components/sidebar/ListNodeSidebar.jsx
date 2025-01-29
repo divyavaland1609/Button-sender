@@ -57,6 +57,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
   const [editingCardId, setEditingCardId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [imageUrl, setImageUrl] = useState(alldata?.data?.mediaUrl ?? "");
+  const[listTitle,setListTitle]=useState(alldata?.data?.listTitle?? "");
   const [loading] = useState(false);
 
   useEffect(() => {
@@ -66,6 +67,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
       setMenuTitle(alldata.data?.menuTitle ?? "Header Title");
       // setImageUrl(alldata?.data?.imageUrl ?? "");
       setFooterTitle(alldata.data?.footerTitle ?? "Footer Title");
+      setListTitle(alldata?.data?.listTitle?? "List");  
       setData({
         actions: Array.isArray(alldata.data?.actions)
           ? alldata.data.actions
@@ -165,7 +167,11 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
     const data = { selectedNode, value: e.target.value, key: "footerTitle" };
     dispatch(setUpdateNodeData(data));
   };
-
+  const handleListTitleChange = (e) => {
+    setListTitle(e.target.value);
+    const data = { selectedNode, value: e.target.value, key: "listTitle" };
+    dispatch(setUpdateNodeData(data));
+  };
   const uploadButton = (
     <button
       style={{
@@ -239,7 +245,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
     >
       <Form form={form} layout="vertical">
         <Row align="middle" justify="center" gutter={[3, 12]}>
-          <Col md={10}>
+          <Col md={12}>
             <Form.Item>
               <Input
                 size="small"
@@ -265,7 +271,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
           >
             <EditOutlined />
           </Col>
-          <Col md={12} style={{ paddingRight: "8px" }}>
+          <Col md={10} style={{ paddingRight: "8px" ,paddingTop:"5px"}}>
             <Badge.Ribbon text="List Message" className="badge">
               <div style={{ width: "100%" }}></div>{" "}
             </Badge.Ribbon>
@@ -298,7 +304,15 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
             // onChange={(e) => setFooterTitle(e.target.value)}
           />
         </Form.Item>
-
+        <Form.Item label="List Title">
+          <Input
+            size="small"
+            placeholder="Enter List Title"
+            value={listTitle}
+            onChange={handleListTitleChange}
+            // onChange={(e) => setFooterTitle(e.target.value)}
+          />
+        </Form.Item>
         <Form.Item
           label={
             <>
@@ -337,7 +351,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
           )}
         </Form.Item>
 
-        <Flex justify="space-between" align="center">
+        <Flex justify="space-between" align="center" style={{padding:"14px 0px 8px"}}>
           {/* <Form.Item label="Button Label" /> */}
           <Typography.Text>List</Typography.Text>
           <Button size="small" onClick={addNewCard}>
@@ -401,7 +415,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
                     <Form.Item label="Title">
                       <Input
                         size="small"
-                        value={btn.title}
+                        value={btn.title || `List ${index + 1}`}
                         onChange={(e) =>
                           handleChange(index, "title", e.target.value)
                         }

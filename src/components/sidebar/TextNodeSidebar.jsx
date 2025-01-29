@@ -142,7 +142,7 @@ const TextNodeSidebar = ({ setSelectedNode, title, selectedNode }) => {
     >
       <Form form={form} layout="vertical">
         <Row align="middle" justify="center" gutter={[3, 12]}>
-          <Col md={10}>
+          <Col md={12}>
             <Form.Item>
               <Input
                 size="small"
@@ -167,7 +167,7 @@ const TextNodeSidebar = ({ setSelectedNode, title, selectedNode }) => {
           >
             <EditOutlined />
           </Col>
-          <Col md={12} style={{ paddingRight: "8px" }}>
+          <Col md={10} style={{ paddingRight: "8px" }}>
             <Badge.Ribbon text="Text Message" className="badge">
               <div style={{ width: "100%" }}></div>{" "}
             </Badge.Ribbon>
