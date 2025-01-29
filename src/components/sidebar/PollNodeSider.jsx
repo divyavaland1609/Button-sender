@@ -308,7 +308,6 @@ const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
                 src={imageUrl?.response?.url || imageUrl}
                 alt="avatar"
                 style={{
-                  objectFit: "scale-down",
                   width: "100%",
                   height: 50,
                 }}

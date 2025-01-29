@@ -126,7 +126,7 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
     });
   };
   const addNewCard = () => {
-    if (data.actions.length < 11) {
+    if (data.actions.length < 5) {
       setData((prev) => {
         const value = {
           ...prev,
@@ -145,24 +145,68 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
         return value;
       });
     } else {
-      message.warning("Cannot add more than 11 buttons");
+      message.warning("Cannot add more than 5 buttons");
     }
   };
+  // const addNewCard = () => {
+  //   if (data.actions.length < 5) {
+  //     setData((prev) => {
+  //       const value = {
+  //         ...prev,
+  //         actions: [
+  //           ...prev.actions,
+  //           {
+  //             id: prev.actions.length,
+  //             type: "quick",
+  //             title: "",
+  //             payload: "",
+  //           },
+  //         ],
+  //       };
+  //       const data = { selectedNode, value: value.actions, key: "actions" };
+  //       dispatch(setUpdateNodeData(data));
+  //       return value;
+  //     });
+  //   } else {
+  //     message.warning("Cannot add more than 5 buttons");
+  //   }
+  // };
 
-  const deleteCard = (index) => {
-    if (data.actions.length > 1) {
-      setData((prev) => {
-        const value = [...prev.actions]
-          .filter((_, i) => i !== index)
-          .map((item, i) => ({ ...item, id: i }));
-        const data = { selectedNode, value, key: "actions" };
-        dispatch(setUpdateNodeData(data));
-        return { ...prev, actions: value };
-      });
-    } else {
-      message.warning("Buttons must be greater than 1");
-    }
-  };
+  // const deleteCard = (index) => {
+  //   if (data.actions.length > 1) {
+  //     setData((prev) => {
+  //       const value = [...prev.actions]
+  //         .filter((_, i) => i !== index)
+  //         .map((item, i) => ({ ...item, id: i }));
+  //       const data = { selectedNode, value, key: "actions" };
+  //       dispatch(setUpdateNodeData(data));
+  //       return { ...prev, actions: value };
+  //     });
+  //   } else {
+  //     message.warning("Buttons must be greater than 1");
+  //   }
+  // };
+
+
+  
+const deleteCard = (index) => {
+  if (data.actions.length > 1) {
+    setData((prev) => {
+      const value = [...prev.actions]
+        .filter((_, i) => i !== index)
+        .map((item, i) => ({ ...item, id: i }));
+      const data = { selectedNode, value, key: "actions" };
+      dispatch(setUpdateNodeData(data));
+      return { ...prev, actions: value };
+    });
+  } else {
+    message.warning("Buttons must be greater than 1");
+  }
+};
+
+const quickReplyCount = data.actions.filter(btn => btn.type === "quick").length;
+const quickReplyCount1 = data.actions.filter(btn => btn.type === "call").length;
+const quickReplyCount2 = data.actions.filter(btn => btn.type === "url").length;
 
   const selectBefore = (
     <Select defaultValue="http://">
@@ -238,19 +282,6 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
     );
   };
   return (
-    // <ProLayout
-    //   collapsedButtonRender={false}
-    //   fixSiderbar
-    //   theme="light"
-    //   siderWidth={260}
-    //   headerRender={false}
-    //   collapsed={false}
-    //   style={{ width: "0px" }}
-    //   className="custom-prolayout"
-    //   menuContentRender={() => (
-    //     <div className="pro-sidebar">
-    //       <SideBarHeader setSelectedNode={setSelectedNode} title={title} />
-    //       <br />
     <ConfigProvider
       theme={{
         components: {
@@ -313,8 +344,8 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
               <img
                 src={imageUrl?.response?.url || imageUrl}
                 alt="avatar"
+                
                 style={{
-                  objectFit: "scale-down",
                   width: "100%",
                   height: 50,
                 }}
@@ -389,8 +420,9 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
                           {btn?.type === "quick" && <MessageOutlined />}
                           {btn?.type === "call" && <PhoneOutlined />}
                           {btn?.type === "url" && <LinkOutlined />}
-                          {btn?.type === "location" && <EnvironmentOutlined />}
-                          {btn?.type === "calendar" && <CalendarOutlined />}
+                          {btn?.type === "unsubcribe" && (
+                            <EnvironmentOutlined />
+                          )}
                         </>
                       }
                     >
@@ -424,10 +456,10 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
                             {btn?.type === "quick" && <MessageOutlined />}
                             {btn?.type === "call" && <PhoneOutlined />}
                             {btn?.type === "url" && <LinkOutlined />}
-                            {btn?.type === "location" && (
+                            {btn?.type === "unsubcribe" && (
                               <EnvironmentOutlined />
                             )}
-                            {btn?.type === "calendar" && <CalendarOutlined />}
+                            {/* {btn?.type === "calendar" && <CalendarOutlined />} */}
                           </>
                         }
                       >
@@ -447,11 +479,10 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
                           }
                           style={{ width: "100%" }}
                           options={[
-                            { value: "quick", label: "Quick Reply" },
-                            { value: "call", label: "Call Button" },
-                            { value: "url", label: "URL Button" },
-                            { value: "location", label: "Location" },
-                            { value: "calendar", label: "Calendar" },
+                            { value: "quick", label: "Quick Reply", disabled: quickReplyCount >= 3 },
+                            { value: "call", label: "Call Button", disabled: quickReplyCount1 >= 1 },
+                            { value: "url", label: "URL Button", disabled: quickReplyCount2 >= 1 },
+                            { value: "unsubcribe", label: "UnSubcribe" },
                           ]}
                         />
                       </Form.Item>
@@ -530,18 +561,6 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
                             }}
                           />
                         </Form.Item>
-                        {/* <Form.Item
-                          name={`button-phoneNumber-${index}`}
-                          label="Phone Number"
-                        >
-                          <Input
-                            value={btn.phoneNumber}
-                            onChange={(e) =>
-                              handleChange(index, "phoneNumber", e.target.value)
-                            }
-                            placeholder="Enter Phone Number"
-                          />
-                        </Form.Item> */}
                       </Col>
                     )}
                     {btn.type === "url" && (
@@ -563,315 +582,15 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
                         </Form.Item>
                       </Col>
                     )}
-                    {btn.type === "location" && (
-                      <>
-                        <Col md={12}>
-                          <Form.Item
-                            name={`button-longitude-${index}`}
-                            label="Longitude"
-                            initialValue={btn.longitude}
-                          >
-                            <InputNumber
-                              size="small"
-                              style={{ width: "100%" }}
-                              value={btn.longitude}
-                              onChange={(value) =>
-                                handleChange(index, "longitude", value)
-                              }
-                              placeholder="Enter Longitude"
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col md={12}>
-                          <Form.Item
-                            name={`button-latitude-${index}`}
-                            label="Latitude"
-                            initialValue={btn.latitude}
-                          >
-                            <InputNumber
-                              size="small"
-                              style={{ width: "100%" }}
-                              value={btn.latitude}
-                              onChange={(value) =>
-                                handleChange(index, "latitude", value)
-                              }
-                              placeholder="Enter Latitude"
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col md={24}>
-                          <Form.Item
-                            name={`button-label-${index}`}
-                            label="Label"
-                            initialValue={btn.label}
-                          >
-                            <Input
-                              size="small"
-                              value={btn.payload}
-                              onChange={(e) =>
-                                handleChange(index, "payload", e.target.value)
-                              }
-                              placeholder="Enter Label"
-                            />
-                          </Form.Item>
-                        </Col>
-                      </>
-                    )}
-                    {btn.type === "calendar" && (
-                      <>
-                        <Col md={12}>
-                          <Form.Item
-                            name={`button-endDate-${index}`}
-                            label="End Date"
-                            initialValue={btn.endDate}
-                          >
-                            <DatePicker
-                              size="small"
-                              style={{ width: "100%" }}
-                              value={btn.endDate}
-                              onChange={(date) =>
-                                handleChange(index, "endDate", date)
-                              }
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col md={12}>
-                          <Form.Item
-                            name={`button-startDate-${index}`}
-                            label="Start Date"
-                            initialValue={btn.startDate}
-                          >
-                            <DatePicker
-                              size="small"
-                              style={{ width: "100%" }}
-                              value={btn.startDate}
-                              onChange={(date) =>
-                                handleChange(index, "startDate", date)
-                              }
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col md={24}>
-                          <Form.Item
-                            name={`button-calender-${index}`}
-                            label="Label"
-                            rules={[
-                              {
-                                required: true,
-                                type: "string",
-                                message: "Please enter label",
-                              },
-                            ]}
-                            initialValue={btn.calender}
-                          >
-                            <Input
-                              size="small"
-                              value={btn.payload}
-                              onChange={(e) =>
-                                handleChange(index, "calender", e.target.value)
-                              }
-                              placeholder="Enter Label"
-                            />
-                          </Form.Item>
-                        </Col>
-                      </>
-                    )}
+                    {btn.type === "unsubcribe" && <></>}
                   </Row>
                 </Form>
               )}
             </Card>
           ))}
         </div>
-        {/* {data?.actions?.map((btn, index) => (
-              <Card
-                key={index}
-                style={{ position: "relative", marginBottom: 10 }}
-              >
-                <CloseOutlined
-                  onClick={() => deleteCard(index)}
-                  style={{ position: "absolute", top: 6, right: 6 }}
-                />
-                <Row gutter={[16, 0]}>
-                  <Col md={24}>
-                    <Form.Item name={`button-type-${index}`} label="Action">
-                      <Select
-                        defaultValue="quick"
-                        value={btn.type}
-                        onChange={(value) => handleChange(index, "type", value)}
-                        style={{ width: "100%" }}
-                        options={[
-                          { value: "quick", label: "Quick Reply" },
-                          { value: "call", label: "Call Button" },
-                          { value: "url", label: "URL Button" },
-                          { value: "location", label: "Location" },
-                          { value: "calendar", label: "Calendar" },
-                        ]}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col md={24}>
-                    <Form.Item
-                      name={`button-title-${index}`}
-                      rules={[
-                        {
-                          required: true,
-                          type: "string",
-                          message: "Please enter title",
-                        },
-                        {
-                          max: 25,
-                          message: "Title must be within 25 characters",
-                        },
-                      ]}
-                      label="Title"
-                      initialValue={btn.title}
-                    >
-                      <Input
-                        style={{ fontSize: "15px" }}
-                        value={btn.title}
-                        onChange={(e) =>
-                          handleChange(index, "title", e.target.value)
-                        }
-                        placeholder="Enter Title"
-                        maxLength={25}
-                      />
-                    </Form.Item>
-                  </Col>
-                  {btn.type === "call" && (
-                    <Col md={24}>
-                      <Form.Item
-                        name={`button-phoneNumber-${index}`}
-                        label="Phone Number"
-                      >
-                        <Input
-                          value={btn.phoneNumber}
-                          onChange={(e) =>
-                            handleChange(index, "phoneNumber", e.target.value)
-                          }
-                          placeholder="Enter Phone Number"
-                        />
-                      </Form.Item>
-                    </Col>
-                  )}
-                  {btn.type === "url" && (
-                    <Col md={24}>
-                      <Form.Item name={`button-url-${index}`} label="URL">
-                        <Input
-                          value={btn.payload}
-                          onChange={(e) =>
-                            handleChange(index, "payload", e.target.value)
-                          }
-                          placeholder="Enter URL"
-                        />
-                      </Form.Item>
-                    </Col>
-                  )}
-                  {btn.type === "location" && (
-                    <>
-                      <Col md={24}>
-                        <Form.Item name={`button-label-${index}`} label="Label">
-                          <Input
-                            value={btn.payload}
-                            onChange={(e) =>
-                              handleChange(index, "payload", e.target.value)
-                            }
-                            placeholder="Enter Label"
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col md={24}>
-                        <Form.Item
-                          name={`button-latitude-${index}`}
-                          label="Latitude"
-                        >
-                          <InputNumber
-                            style={{ width: "100%" }}
-                            value={btn.latitude}
-                            onChange={(value) =>
-                              handleChange(index, "latitude", value)
-                            }
-                            placeholder="Enter Latitude"
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col md={24}>
-                        <Form.Item
-                          name={`button-longitude-${index}`}
-                          label="Longitude"
-                        >
-                          <InputNumber
-                            style={{ width: "100%" }}
-                            value={btn.longitude}
-                            onChange={(value) =>
-                              handleChange(index, "longitude", value)
-                            }
-                            placeholder="Enter Longitude"
-                          />
-                        </Form.Item>
-                      </Col>
-                    </>
-                  )}
-                  {btn.type === "calendar" && (
-                    <>
-                      <Col md={24}>
-                        <Form.Item
-                          name={`button-label-${index}`}
-                          label="Label"
-                          rules={[
-                            {
-                              required: true,
-                              type: "string",
-                              message: "Please enter label",
-                            },
-                          ]}
-                        >
-                          <Input
-                            value={btn.payload}
-                            onChange={(e) =>
-                              handleChange(index, "label", e.target.value)
-                            }
-                            placeholder="Enter Label"
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col md={24}>
-                        <Form.Item
-                          name={`button-startDate-${index}`}
-                          label="Start Date"
-                        >
-                          <DatePicker
-                            style={{ width: "100%" }}
-                            value={btn.startDate}
-                            onChange={(date) =>
-                              handleChange(index, "startDate", date)
-                            }
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col md={24}>
-                        <Form.Item
-                          name={`button-endDate-${index}`}
-                          label="End Date"
-                        >
-                          <DatePicker
-                            style={{ width: "100%" }}
-                            value={btn.endDate}
-                            onChange={(date) =>
-                              handleChange(index, "endDate", date)
-                            }
-                          />
-                        </Form.Item>
-                      </Col>
-                    </>
-                  )}
-                </Row>
-              </Card>
-            ))} */}
       </Form>
     </ConfigProvider>
-    //     </div>
-    //   )}
-    // ></ProLayout>
   );
 };
 export default ButtonNodeSidebar;
