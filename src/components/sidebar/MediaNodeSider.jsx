@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from "react";
 import {
   Badge,
@@ -5,128 +7,48 @@ import {
   ConfigProvider,
   Form,
   Input,
-  Layout,
   message,
   Row,
   Upload,
 } from "antd";
-import { EditOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import TextArea from "antd/es/input/TextArea";
-import SideBarHeader from "./components/SideBarHeader";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  LoadingOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setUpdateNodeData } from "../../redux/nodesSlice";
-import { ProLayout } from "@ant-design/pro-components";
-import TextEditor from "../Node/Texteditor";
-const { Sider } = Layout;
 
-const MediaNodeSider = ({ title, setSelectedNode, selectedNode }) => {
+
+const MediaNodeSider = ({ selectedNode }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes.find((item) => item.id === selectedNode);
   const { Dragger } = Upload;
-  const [loading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(alldata?.data?.mediaUrl ?? "");
-  const [message1, setMessage] = useState(alldata?.data?.label ?? "");
-  const [templateName, setTemplateName] = useState(
-    alldata?.data?.templateName ?? ""
-  );
 
-  const [data, setData] = useState({
-    actions: alldata?.data?.actions ?? [
-      {
-        id: 0,
-        type: "quick",
-        title: "",
-        payload: "",
-      },
-    ],
-  });
+  const [loading] = useState(false);
+  const [templateName, setTemplateName] = useState(
+    alldata?.data?.templateName ?? "Media"
+  );
   const [isEditing, setIsEditing] = useState(false);
+  const [mediaArray, setMediaArray] = useState(alldata?.data?.mediaArray ?? []);
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    const initValues = data?.actions?.reduce((acc, button, i) => {
-      acc[`button-type-${i}`] = button.type;
-      acc[`button-title-${i}`] = button.title;
-      acc[`button-payload-${i}`] = button.payload;
-      acc[`button-phoneNumber-${i}`] = button.phoneNumber;
-      acc[`button-url-${i}`] = button.url;
-      acc[`button-label-${i}`] = button.label;
-      acc[`button-latitude-${i}`] = button.latitude;
-      acc[`button-longitude-${i}`] = button.longitude;
-      acc[`button-startDate-${i}`] = button.startDate;
-      acc[`button-endDate-${i}`] = button.endDate;
-      acc[`button-description-${i}`] = button.description;
-      return acc;
-    }, {});
-    form.setFieldsValue(initValues);
-  }, [data?.actions]);
+    const alldata = nodes.find((item) => item.id === selectedNode);
 
-  const handleChange = (index, key, val) => {
-    setData((prev) => {
-      const actions = [...prev.actions];
-      if (key === "type") {
-        actions[index] = { id: index, title: actions[index].title, [key]: val };
-      } else {
-        actions[index] = { ...actions[index], [key]: val };
-      }
-      const { actions: value } = { actions };
-      const data = { selectedNode, value, key: "actions" };
-      dispatch(setUpdateNodeData(data));
-      return { ...prev, actions };
-    });
-  };
-
-  const addNewCard = () => {
-    if (data.actions.length < 11) {
-      setData((prev) => {
-        const value = {
-          ...prev,
-          actions: [
-            ...prev.actions,
-            {
-              id: prev.actions.length,
-              type: "quick",
-              title: "",
-              payload: "",
-            },
-          ],
-        };
-        const data = { selectedNode, value: value.actions, key: "actions" };
-        dispatch(setUpdateNodeData(data));
-        return value;
-      });
-    } else {
-      message.warning("Cannot add more than 11 buttons");
+    if (alldata) {
+      setTemplateName(alldata?.data?.templateName ?? "Media");
+      setMediaArray(alldata?.data?.mediaArray ?? []);
     }
-  };
-
-  const deleteCard = (index) => {
-    if (data.actions.length > 1) {
-      setData((prev) => {
-        const value = [...prev.actions]
-          .filter((_, i) => i !== index)
-          .map((item, i) => ({ ...item, id: i }));
-        const data = { selectedNode, value, key: "actions" };
-        dispatch(setUpdateNodeData(data));
-        return { ...prev, actions: value };
-      });
-    } else {
-      message.warning("Buttons must be greater than 1");
-    }
-  };
+  }, [selectedNode, nodes]);
 
   const handleTemplateNameChange = (e) => {
     const value = e.target.value;
     setTemplateName(value);
     const data = { selectedNode, value, key: "templateName" };
-    dispatch(setUpdateNodeData(data));
-  };
-
-  const handleMessageChange = (value) => {
-    const MessageName = value;
-    setMessage(MessageName);
-    const data = { selectedNode, value, key: "label" };
     dispatch(setUpdateNodeData(data));
   };
 
@@ -149,37 +71,62 @@ const MediaNodeSider = ({ title, setSelectedNode, selectedNode }) => {
     </button>
   );
 
-  const props = {
-    name: "file",
-    multiple: false,
-    onChange(info) {
-      const { status } = info.file;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (status === "done") {
-        setImageUrl(info.file);
-        const value = info.file.response.url;
-        const data = { selectedNode, value, key: "mediaUrl" };
-        dispatch(setUpdateNodeData(data));
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
-
-  const customUpload = ({ file, onSuccess, onError }) => {
+  const handleMediaUpload = ({ file, onSuccess, onError }) => {
     setTimeout(() => {
+      if (mediaArray.length >= 10) {
+        onError(new Error("Media limit reached"));
+        message.error(`You can only upload up to ${10} media items.`);
+        return;
+      }
+  
       if (file) {
-        onSuccess({ url: URL.createObjectURL(file) });
+        const url = URL.createObjectURL(file);
+        const newMedia = { url, name: file.name };
+  
+        // Update local state
+        setMediaArray((prev) => {
+          const updatedMediaArray = [...prev, newMedia];
+  
+          // Update Redux store
+          dispatch(
+            setUpdateNodeData({
+              selectedNode,
+              value: updatedMediaArray,
+              key: "mediaArray",
+            })
+          );
+  
+          return updatedMediaArray;
+        });
+  
+        onSuccess({ url });
+        message.success(`${file.name} uploaded successfully.`);
       } else {
         onError(new Error("Upload failed"));
+        message.error(`${file.name} upload failed.`);
       }
     }, 1000);
   };
 
-  const inputRef = useRef(null);
+  const handleDelete = (index) => {
+    setMediaArray((prev) => {
+      const updatedMediaArray = prev.filter((_, i) => i !== index);
+
+      // Update Redux store
+      dispatch(
+        setUpdateNodeData({
+          selectedNode,
+          value: updatedMediaArray,
+          key: "mediaArray",
+        })
+      );
+
+      return updatedMediaArray;
+    });
+
+    message.success("Media deleted successfully.");
+  };
+
   const toggleEditMode = () => {
     setIsEditing(true);
     setTimeout(() => {
@@ -188,19 +135,6 @@ const MediaNodeSider = ({ title, setSelectedNode, selectedNode }) => {
   };
 
   return (
-    // <ProLayout
-    // collapsedButtonRender={false}
-    // fixSiderbar
-    // theme="light"
-    // siderWidth={260}
-    // headerRender={false}
-    // collapsed={false}
-    // style={{ width: "0px" }}
-    // className="custom-prolayout"
-    // menuContentRender={() => (
-    //   <div className="pro-sidebar">
-    //     <SideBarHeader setSelectedNode={setSelectedNode} title={title} />
-    //     <br />
     <ConfigProvider
       theme={{
         components: {
@@ -211,81 +145,93 @@ const MediaNodeSider = ({ title, setSelectedNode, selectedNode }) => {
         },
       }}
     >
-         <Form form={form} layout="vertical">
-      <Row align="middle" justify="center">
-        <Col md={15}>
-          <Form.Item>
-            <Input
-              size="small"
-              maxLength={25}
-              ref={(input) => (inputRef.current = input?.input || null)}
-              placeholder="Enter Template Name"
-              value={templateName || "Media"}
-              onChange={handleTemplateNameChange}
-              readOnly={!isEditing}
-            />
-          </Form.Item>
-        </Col>
-        <Col
-          md={2}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            cursor: "pointer",
-          }}
-          onClick={toggleEditMode}
-        >
-          <EditOutlined />
-        </Col>
-        <Col md={7} style={{ paddingRight: "8px" }}>
-          <Badge.Ribbon text="Media" className="badge">
-            <div style={{ width: "100%" }}></div>{" "}
-          </Badge.Ribbon>
-        </Col>
-      </Row>
-   
-        <Col md={24}>
-          <Form.Item label="Media" required>
-            <Dragger {...props} customRequest={customUpload} showUploadList={false}>
-              {imageUrl ? (
-                <img
-                  src={imageUrl?.response?.url || imageUrl}
-                  alt="avatar"
-                  style={{
-                    objectFit: "scale-down",
-                    width: "100%",
-                    height: 50,
-                  }}
-                />
-              ) : (
-                uploadButton
-              )}
-            </Dragger>
-          </Form.Item>
-        </Col>
-        <Form.Item label="Message">
-          {/* <TextEditor
-            value={message1}
-            onChange={(value) => {
-              setMessage(value);
-              {
-                handleMessageChange(value);
-              }
+      <Form form={form} layout="vertical">
+        <Row align="middle" justify="center">
+          <Col md={15}>
+            <Form.Item>
+              <Input
+                size="small"
+                ref={(input) => (inputRef.current = input?.input || null)}
+                placeholder="Enter Template Name"
+                value={templateName}
+                onChange={handleTemplateNameChange}
+                readOnly={!isEditing}
+                maxLength={25}
+              />
+            </Form.Item>
+          </Col>
+          <Col
+            md={4}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
             }}
-          /> */}
-          {/* <TextArea
-            rows={4}
-            placeholder="Enter Message"
-            onChange={handleMessageChange}
-            value={message1}
-          /> */}
-        </Form.Item>
+            onClick={toggleEditMode}
+          >
+            <EditOutlined />
+          </Col>
+          <Col md={5} style={{ paddingRight: "8px" }}>
+            <Badge.Ribbon text="Media" className="badge">
+              <div style={{ width: "100%" }}></div>{" "}
+            </Badge.Ribbon>
+          </Col>
+        </Row>
+        <Row align="middle" justify="space-evenly">
+          <Col md={24}>
+            <Form.Item label="Media">
+              <Dragger
+                customRequest={handleMediaUpload}
+                showUploadList={false}
+                style={{ padding: 10 }}
+              >
+                {uploadButton}
+              </Dragger>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "10px",
+                  marginTop: 10,
+                }}
+              >
+                {mediaArray.map((media, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      position: "relative",
+                      width: 110,
+                      height: 90,
+                    }}
+                  >
+                    <img
+                      src={media.url}
+                      alt={media.name}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <DeleteOutlined
+                      style={{
+                        position: "absolute",
+                        top: 6,
+                        right: 6,
+                        color: "red",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => handleDelete(index)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
     </ConfigProvider>
-    //     </div>
-    // )}
-    //   ></ProLayout>
   );
 };
 

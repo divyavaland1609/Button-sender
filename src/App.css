@@ -1139,3 +1139,15 @@ div:where(.css-dev-only-do-not-override-tqzgtm).ant-typography,
   background: #ffffff00;
   box-shadow: none !important;
 }
+.carousel-container {
+  width: 200px;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.carousel-slide {
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  border-radius: 10px;
+}

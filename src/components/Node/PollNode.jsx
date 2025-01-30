@@ -56,7 +56,7 @@ function PollNode({ data, selected }) {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [isConnectedToStartNode, setIsConnectedToStartNode] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const[checked,setChecked] = useState(false);
+  const [checked, setChecked] = useState(false);
   useEffect(() => {
     if (alldata?.data?.allowMultiple) {
       setSelectedOptions([]);
@@ -186,10 +186,11 @@ function PollNode({ data, selected }) {
         <Row
           style={{
             width: "100%",
-            padding: "0px 10px 0px 10px",
+            padding: "0px 10px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            position: "relative",
           }}
         >
           <Col>
@@ -214,17 +215,196 @@ function PollNode({ data, selected }) {
           <Col>
             <Avatar icon={<UserOutlined />} size="small" />
           </Col>
+
+          <Handle
+            id={`handle-${index}`}
+            type="source"
+            position={Position.Right}
+            isConnectable={!alldata?.data?.disabled}
+            style={{
+              background: "transparent",
+              position: "absolute",
+              width: "20px",
+              right: "-19px",
+              border: "none",
+              top: "50%",
+              height: "50px",
+              zIndex: 10,
+              transform: "translateY(-50%)",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              right: "-7px",
+              top: "50%",
+              transform: "translateY(-50%)",
+            }}
+          >
+            {data?.isStartNode || alldata?.data?.isStartNode ? (
+              isConnected ? (
+                <Badge status="success" />
+              ) : (
+                <Badge status="processing" />
+              )
+            ) : isConnectedToStartNode ? (
+              <Badge status="success" />
+            ) : (
+              <Badge status="processing" />
+            )}
+          </div>
         </Row>
+
         <Progress
           showInfo={false}
           percent={selectedOptions.includes(label) ? 100 : 0}
           strokeColor={selectedOptions.includes(label) ? "#00313e" : "#87d068"}
           strokeWidth={10}
-          style={{ marginBottom: "8px", padding: "0px 10px 0px 10px" }}
+          style={{ marginBottom: "8px", padding: "0px 10px" }}
         />
       </Fragment>
     ));
   };
+
+  // const RenderOptions = () => {
+  //   return alldata?.data?.answers?.map(({ value, label }, index) => (
+  //     <Fragment key={index}>
+  //       <Row
+  //         style={{
+  //           width: "100%",
+  //           padding: "0px 10px 0px 10px",
+  //           display: "flex",
+  //           alignItems: "center",
+  //           justifyContent: "space-between",
+  //         }}
+  //       >
+
+  //         <Col>
+  //           {alldata?.data?.allowMultiple ? (
+  //             <Checkbox
+  //               value={label}
+  //               checked={selectedOptions.includes(label)}
+  //               onChange={handleOptionChange}
+  //             >
+  //               {value || `option${index + 1}`}
+  //             </Checkbox>
+  //           ) : (
+  //             <Radio
+  //               value={label}
+  //               checked={selectedOptions[0] === label}
+  //               onChange={handleOptionChange}
+  //             >
+  //               {value || `option${index + 1}`}
+  //             </Radio>
+  //           )}
+  //         </Col>
+  //         <Col>
+  //           <Avatar icon={<UserOutlined />} size="small" />
+  //         </Col>
+  //       </Row>
+  //       <Handle
+  //         type="source"
+  //         position={Position.Right}
+  //         isConnectable
+  //         style={{
+  //           background: "transparent",
+  //           position: "absolute",
+  //           width: "18px",
+  //           border: "none",
+  //           top: "65%",
+  //           height: "37px",
+  //           zIndex: 10,
+  //           transform: "translateY(-50%)",
+  //           visibility: alldata?.data?.isStartNode ? "visible" : "visible",
+  //         }}
+  //       />
+  //       <div
+  //         style={{
+  //           height: "6px",
+  //           display: "flex",
+  //           position: "absolute",
+  //           alignItems: "center",
+  //           justifyContent: "center",
+  //           top: "63%",
+  //           left: alldata?.data?.isStartNode ? "auto" : "200px",
+  //           right: alldata?.data?.isStartNode ? "-2px" : "",
+  //         }}
+  //       >
+  //         {data?.isStartNode || alldata?.data?.isStartNode ? (
+  //           <>
+  //             {isConnected ? (
+  //               <Badge status="success" />
+  //             ) : (
+  //               <Badge status="processing" />
+  //             )}
+  //           </>
+  //         ) : (
+  //           <>
+  //             {isConnectedToStartNode ? (
+  //               <Badge status="success" />
+  //             ) : (
+  //               <Badge status="processing" />
+  //             )}
+  //           </>
+  //         )}
+  //       </div>
+  //       <Progress
+  //         showInfo={false}
+  //         percent={selectedOptions.includes(label) ? 100 : 0}
+  //         strokeColor={selectedOptions.includes(label) ? "#00313e" : "#87d068"}
+  //         strokeWidth={10}
+  //         style={{ marginBottom: "8px", padding: "0px 10px 0px 10px" }}
+  //       >
+  //          <Handle
+  //         type="source"
+  //         position={Position.Right}
+  //         isConnectable
+  //         style={{
+  //           background: "transparent",
+  //           position: "absolute",
+  //           width: "18px",
+  //           border: "none",
+  //           top: "65%",
+  //           height: "37px",
+  //           zIndex: 10,
+  //           transform: "translateY(-50%)",
+  //           visibility: alldata?.data?.isStartNode ? "visible" : "visible",
+  //         }}
+  //       />
+  //       <div
+  //         style={{
+  //           height: "6px",
+  //           display: "flex",
+  //           position: "absolute",
+  //           alignItems: "center",
+  //           justifyContent: "center",
+  //           top: "63%",
+  //           left: alldata?.data?.isStartNode ? "auto" : "200px",
+  //           right: alldata?.data?.isStartNode ? "-2px" : "",
+  //         }}
+  //       >
+  //         {data?.isStartNode || alldata?.data?.isStartNode ? (
+  //           <>
+  //             {isConnected ? (
+  //               <Badge status="success" />
+  //             ) : (
+  //               <Badge status="processing" />
+  //             )}
+  //           </>
+  //         ) : (
+  //           <>
+  //             {isConnectedToStartNode ? (
+  //               <Badge status="success" />
+  //             ) : (
+  //               <Badge status="processing" />
+  //             )}
+  //           </>
+  //         )}
+  //       </div>
+  //         </Progress>
+  //     </Fragment>
+  //   ));
+  // };
   const handleNodeStateChange = (checked) => {
     setEnabled(checked);
 
@@ -476,132 +656,12 @@ function PollNode({ data, selected }) {
                 </>
               )}
             </div>
-
-            <Handle
-              type="source"
-              position={Position.Right}
-              isConnectable
-              style={{
-                background: "transparent",
-                position: "absolute",
-                width: "18px",
-                border: "none",
-                top: "65%",
-                height: "37px",
-                zIndex: 10,
-                transform: "translateY(-50%)",
-                visibility: alldata?.data?.isStartNode ? "visible" : "visible",
-              }}
-            />
-            <div
-              style={{
-                height: "6px",
-                display: "flex",
-                position: "absolute",
-                alignItems: "center",
-                justifyContent: "center",
-                top: "63%",
-                left: alldata?.data?.isStartNode ? "auto" : "200px",
-                right: alldata?.data?.isStartNode ? "-2px" : "",
-              }}
-            >
-              {data?.isStartNode || alldata?.data?.isStartNode ? (
-                <>
-                  {isConnected ? (
-                    <Badge status="success" />
-                  ) : (
-                    <Badge status="processing" />
-                  )}
-                </>
-              ) : (
-                <>
-                  {isConnectedToStartNode ? (
-                    <Badge status="success" />
-                  ) : (
-                    <Badge status="processing" />
-                  )}
-                </>
-              )}
-            </div>
-            {/* <Handle
-                id="123"
-                type={
-                  alldata?.data?.isStartNode || data.isStartNode
-                    ? "source"
-                    : "target"
-                }
-                position={
-                  alldata?.data?.isStartNode ? Position.Right : Position.Left
-                }
-                isConnectable={true}
-                // isConnectable={alldata?.data?.disabled ? false : true}
-                style={{
-                  background: "transparent",
-                  position: "absolute",
-                  width: "20px",
-                  left: alldata?.data?.isStartNode ? "auto" : "-8px",
-                  right: alldata?.data?.isStartNode ? "-6px" : "auto",
-                  border: "none",
-                  top: "56%",
-                  height: "50px",
-                  zIndex: 10,
-                  transform: "translateY(-50%)",
-                }}
-              >
-                <div
-                  style={{
-                    height: "6px",
-                    display: "flex",
-                    position: "relative",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    top: "20px",
-                    left: alldata?.data?.isStartNode ? "auto" : "-1px",
-                    right: alldata?.data?.isStartNode ? "-5px" : "auto",
-                  }}
-                >
-                   {data?.isStartNode || alldata?.data?. isStartNode ? (
-                    <>
-                      {isConnected ? (
-                        <Badge status="success" />
-                      ) : (
-                        <Badge status="processing" />
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {isConnectedToStartNode ? (
-                        <Badge status="success" />
-                      ) : (
-                        <Badge status="processing" />
-                      )}
-                    </>
-                  )}
-                </div>
-              </Handle> */}
           </>
-          {/* )} */}
-
-          {/* {alldata?.data?.mediaUrl ? (
-              <img
-                src={alldata?.data?.mediaUrl}
-                alt="Node Media"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "cover",
-                  borderRadius: "10px",
-                  marginTop: "10px",
-                }}
-              />
-            ) : null} */}
 
           <Paragraph
             style={{
               lineHeight: "1.00",
               padding: "10px",
-              // paddingLeft: "10px",
-              // padding: "5px 5px 20px 5px",
             }}
           >
             <small>{alldata?.data?.question ?? "Question"}</small>
@@ -616,7 +676,7 @@ function PollNode({ data, selected }) {
                 <Radio.Group
                   onChange={handleOptionChange}
                   value={selectedOptions[0]}
-                  style={{ width: "100%", padding: "8px" }}
+                  style={{ width: "100%", }}
                 >
                   <RenderOptions />
                 </Radio.Group>
@@ -624,75 +684,134 @@ function PollNode({ data, selected }) {
             </Col>
           ) : (
             <>
+            {/* First Answer */}
+            <div style={{ position: "relative", marginBottom: "8px" }}>
               <Row
                 style={{
                   width: "100%",
-                  padding: "0px 10px 0px 10px",
+                  padding: "0px 10px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
                 }}
               >
                 <Col>
-                  {/* {alldata?.data?.allowMultiple ? (
-                <Checkbox
-                  value={label}
-                  checked={selectedOptions.includes(label)}
-                  onChange={handleOptionChange}
-                >
-                  {value ?? `option-${index + 1}`}
-                </Checkbox>
-              ) : ( */}
-                  <Radio
-                    // value={label}
-                    // checked={selectedOptions[0] === label}
-                    onChange={handleOptionChange}
-                  >
-                    {`option 1`}
-                  </Radio>
-                  {/* )} */}
+                  <Radio onChange={handleOptionChange}>{`option 1`}</Radio>
                 </Col>
                 <Col>
                   <Avatar icon={<UserOutlined />} size="small" />
                 </Col>
               </Row>
+          
               <Progress
                 showInfo={false}
                 percent={0}
                 strokeColor={"#87d068"}
                 strokeWidth={10}
-                style={{ marginBottom: "8px", padding: "0px 10px 0px 10px" }}
+                style={{ marginBottom: "8px", padding: "0px 10px" }}
               />
+          
+              <Handle
+                id="handle-1"
+                type="source"
+                position={Position.Right}
+                isConnectable
+                style={{
+                  background: "transparent",
+                  position: "absolute",
+                  width: "20px",
+                  right: "-19px",
+                  border: "none",
+                  top: "27%",
+                  height: "50px",
+                  zIndex: 10,
+                  transform: "translateY(-50%)",
+                }}
+              />
+          
+              <div
+                 style={{
+                  position: "absolute",
+                  right: "-7px",
+                  top: "23%",
+                  transform: "translateY(-50%)",
+                }}
+              >
+                {data?.isStartNode || alldata?.data?.isStartNode ? (
+                  isConnected ? <Badge status="success" /> : <Badge status="processing" />
+                ) : isConnectedToStartNode ? (
+                  <Badge status="success" />
+                ) : (
+                  <Badge status="processing" />
+                )}
+              </div>
+            </div>
+          
+            {/* Second Answer */}
+            <div style={{ position: "relative", marginBottom: "8px" }}>
               <Row
                 style={{
                   width: "100%",
-                  padding: "0px 10px 0px 10px",
+                  padding: "0px 10px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
                 }}
               >
                 <Col>
-                 
-                  <Radio
-                    onChange={handleOptionChange}
-                  >
-                    {`option 2`}
-                  </Radio>
-                  {/* )} */}
+                  <Radio onChange={handleOptionChange}>{`option 2`}</Radio>
                 </Col>
                 <Col>
                   <Avatar icon={<UserOutlined />} size="small" />
                 </Col>
+                <Handle
+                id="handle-2"
+                type="source"
+                position={Position.Right}
+                isConnectable
+                style={{
+                  background: "transparent",
+                  position: "absolute",
+                  width: "20px",
+                  right: "-19px",
+                  border: "none",
+                  top: "27%",
+                  height: "50px",
+                  zIndex: 10,
+                  transform: "translateY(-50%)",
+                }}
+              />
+          
+              <div
+                style={{
+                  position: "absolute",
+                  right: "-7px",
+                  top: "23%",
+                  transform: "translateY(-50%)",
+                }}
+              >
+                {data?.isStartNode || alldata?.data?.isStartNode ? (
+                  isConnected ? <Badge status="success" /> : <Badge status="processing" />
+                ) : isConnectedToStartNode ? (
+                  <Badge status="success" />
+                ) : (
+                  <Badge status="processing" />
+                )}
+              </div>
               </Row>
+              
               <Progress
                 showInfo={false}
                 percent={0}
                 strokeColor={"#87d068"}
                 strokeWidth={10}
-                style={{ marginBottom: "8px", padding: "0px 10px 0px 10px" }}
+                style={{ marginBottom: "8px", padding: "0px 10px" }}
               />
-            </>
+          
+            
+            </div>
+          </>
+          
           )}
         </div>
         {/* </Card> */}

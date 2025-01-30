@@ -22,7 +22,18 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+// import {
+//   setRichCardNodeData,
+//   setUpdateNodeData,
+// } from "../redux/reducer.button";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css"; // for basic Swiper styles
+import "swiper/css/effect-coverflow"; // for coverflow effect styles
+import "swiper/css/pagination"; // for pagination styles
+import { EffectCoverflow } from "swiper/modules";
 import { setUpdateNodeData } from "../../redux/nodesSlice";
+
+// import { Pagination } from "swiper";
 const blinkingBorderStyle = {
   animation: "blink-border 1s infinite",
 };
@@ -39,13 +50,18 @@ function MediaNode({ data, selected }) {
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes.find((item) => item.id === id);
+
   const dispatch = useDispatch();
   const { Paragraph } = Typography;
   const [enabled, setEnabled] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const [isConnectedToStartNode, setIsConnectedToStartNode] = useState(false);
   const [isRightHandleConnected, setIsRightHandleConnected] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
 
+  const handleSlideClick = (index) => {
+    setActiveSlide(index);
+  };
   const checkParentNodesForStart = (nodeId) => {
     const parentEdges = edges.filter((edge) => edge.target === nodeId);
     if (parentEdges.length === 0) return false;
@@ -63,16 +79,92 @@ function MediaNode({ data, selected }) {
     setIsConnectedToStartNode(connectedToStart);
   }, [edges, id]);
 
-  // const isNodeConnected = (nodeId) => {
-  //   return edges.some(
-  //     (edge) => edge.source === nodeId || edge.target === nodeId
-  //   );
-  // };
+  const handleNodeStateChange = (checked) => {
+    setEnabled(checked);
 
-  // const isConnected = isNodeConnected(id);
+    if (data.isStartNode || alldata?.data?.isStartNode) return;
+
+    dispatch(
+      setUpdateNodeData({
+        selectedNode: id,
+        key: "disabled",
+        value: !checked,
+      })
+    );
+    data.toggleNodeState(id, checked);
+    const connectedNodes = findNodesTillLast(id);
+    // console.log("Connected Nodes:", connectedNodes);
+
+    // Disable all the connected nodes
+    connectedNodes.forEach((node) => {
+      // Dispatch action to disable each connected node
+      dispatch(
+        setUpdateNodeData({
+          selectedNode: node.id,
+          key: "disabled",
+          value: !node.data.disabled, // Disabling the node
+        })
+      );
+      // Toggle the state of the connected node to 'disabled'
+      data.toggleNodeState(node.id, node.data.disabled); // Disabling the node
+    });
+  };
+
+  const findNodesTillLast = (sourceId, visitedNodes = new Set()) => {
+    let connectedNodes = [];
+
+    // Prevent visiting the same node again
+    if (visitedNodes.has(sourceId)) {
+      return connectedNodes; // Return early if the node has already been visited
+    }
+
+    // Mark this node as visited
+    visitedNodes.add(sourceId);
+
+    // Find all edges connected to the current sourceId
+    const edgesOfCurrentNode = edges.filter((edge) => edge.source === sourceId);
+
+    // Loop through all connected edges
+    edgesOfCurrentNode.forEach((edge) => {
+      // Find the target node connected through the edge
+      const nextNode = nodes.find((node) => node.id === edge.target);
+
+      if (nextNode) {
+        connectedNodes.push(nextNode); // Add connected node to the list
+        // Recursively find the next connected nodes
+        const nextConnectedNodes = findNodesTillLast(nextNode.id, visitedNodes);
+        connectedNodes = [...connectedNodes, ...nextConnectedNodes];
+      }
+    });
+
+    return connectedNodes;
+  };
+
+  const isLastNodeConnect = () => {
+    const edgesofCurentNode = edges
+      .filter((edge) => edge.target === id)
+      .map((item) => item.source);
+    // console.log("edgesofCurentNode", edgesofCurentNode);
+    const currentEdges = [...new Set(edgesofCurentNode)];
+
+    const disabledNodes = nodes
+      ?.filter((node) => node.data.disabled === true)
+      ?.filter((node) => currentEdges.includes(node.id));
+
+    // console.log("isConnected", disabledNodes, currentEdges);
+
+    return disabledNodes.length === currentEdges.length &&
+      currentEdges.length > 0
+      ? true
+      : false;
+  };
+
+  const isConnected = isLastNodeConnect();
+  // console.log("isConnected", isConnected);
 
   const nodeStyle = {
-    opacity: alldata?.data?.disabled ? 0.5 : 1,
+    // opacity: isConnected ? 0.5 : 1,
+    filter: isConnected ? "grayscale(100%) opacity(0.5)" : "none",
     border: !enabled
       ? "3px solid #D9D9D9"
       : isHovered
@@ -89,88 +181,6 @@ function MediaNode({ data, selected }) {
       : "none",
   };
 
-
-  const handleNodeStateChange = (checked) => {
-    setEnabled(checked);
-
-    if (data.isStartNode || alldata?.data?.isStartNode) return;
-
-    dispatch(
-      setUpdateNodeData({
-        selectedNode: id,
-        key: "disabled",
-        value: !checked,
-      })
-    );
-    data.toggleNodeState(id, checked);
-    findNodesTillLast(id);
-  };
-
-  const findNodesTillLast = (sourceId, visitedNodes = new Set()) => {
-    let connectedNodes = [];
-  
-    // Prevent visiting the same node again
-    if (visitedNodes.has(sourceId)) {
-      return connectedNodes; // Return early if the node has already been visited
-    }
-  
-    // Mark this node as visited
-    visitedNodes.add(sourceId);
-  
-    // Find all edges connected to the current sourceId
-    const edgesOfCurrentNode = edges.filter((edge) => edge.source === sourceId);
-  
-    // Loop through all connected edges
-    edgesOfCurrentNode.forEach((edge) => {
-      // Find the target node connected through the edge
-      const nextNode = nodes.find((node) => node.id === edge.target);
-      
-      if (nextNode) {
-        connectedNodes.push(nextNode); // Add connected node to the list
-        // Recursively find the next connected nodes
-        const nextConnectedNodes = findNodesTillLast(nextNode.id, visitedNodes);
-        connectedNodes = [...connectedNodes, ...nextConnectedNodes];
-      }
-    });
-  
-    return connectedNodes;
-  };
-
-  // if (!isConnected) {
-  //   nodeStyle.opacity = 1;
-  //   nodeStyle.pointerEvents = "auto";
-  //   nodeStyle.filter = "none";
-  // }
-
-  // const handleNodeStateChange = (checked) => {
-  //   setEnabled(checked);
-
-  //   if (data.isStartNode || alldata?.data?.isStartNode) {
-  //     return;
-  //   }
-
-  //   dispatch(
-  //     setUpdateNodeData({
-  //       selectedNode: id,
-  //       key: "disable",
-  //       value: !checked,
-  //     })
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   if (!isConnected) {
-  //     setEnabled(true);
-  //     dispatch(
-  //       setUpdateNodeData({
-  //         selectedNode: id,
-  //         key: "disabled",
-  //         value: false,
-  //       })
-  //     );
-  //   }
-  // }, [isConnected, dispatch, id]);
-
   const checkRightHandleConnected = () => {
     return edges.some(
       (edge) => edge.source === id && edge.sourceHandle === `handle`
@@ -181,6 +191,14 @@ function MediaNode({ data, selected }) {
     const connected = checkRightHandleConnected();
     setIsRightHandleConnected(connected);
   }, [edges]);
+
+  const isNodeConnected = (nodeId) => {
+    return edges.some(
+      (edge) => edge.source === nodeId || edge.target === nodeId
+    );
+  };
+
+  const connected = isNodeConnected(id);
 
   const items = [
     alldata?.data?.isStartNode
@@ -292,22 +310,24 @@ function MediaNode({ data, selected }) {
         }}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* <Card
-          bodyStyle={{
-            padding: "0px",
-            borderRadius: "14px",
-            background: "rgba(255, 255, 255, 0.8)",
-            boxShadow: "0px -10px 15px rgba(0, 0, 0, 0.2)",
-          }}
-          headStyle={{
-            color: "red",
-            textAlign: "center",
-            borderRadius: "17px 17px 17px 0",
-            padding: "10px",
-            border: "none",
+        <Card
+          styles={{
+            body: {
+              padding: "0px",
+              borderRadius: "14px",
+              background: "rgba(255, 255, 255, 0.8)",
+              boxShadow: "0px -10px 15px rgba(0, 0, 0, 0.2)",
+            },
+            header: {
+              color: "red",
+              textAlign: "center",
+              borderRadius: "17px 17px 17px 0",
+              padding: "10px",
+              border: "none",
+            },
           }}
           style={{
-            width: 200,
+            // width: 200,
             padding: "-1px",
             borderRadius: "14px",
             background: "rgba(255, 255, 255, 0.2)",
@@ -319,15 +339,16 @@ function MediaNode({ data, selected }) {
               : "0 1px 10px rgba(0,0,0,0.15)",
             filter: enabled ? "none" : "grayscale(100%) opacity(0.5)",
           }}
-        > */}
+        >
           <div className="inverted-border-radius  shadow-green ">
             <Flex className="flex-grow" align="center" justify="space-between">
-              <Typography className="title-name">
+              <Typography className="title-name" style={{ marginTop: "-18px" }}>
                 {alldata?.data?.templateName ?? "Media"}
               </Typography>
 
               <Flex gap={5} align="center">
                 <Switch
+                  style={{ marginBottom: "18px" }}
                   checked={enabled}
                   disabled={data.isStartNode || alldata?.data?.isStartNode}
                   onChange={(checked) => handleNodeStateChange(checked)}
@@ -341,6 +362,7 @@ function MediaNode({ data, selected }) {
                 >
                   <MoreOutlined
                     className="more-outlined-icon"
+                    style={{ marginBottom: "18px" }}
                     onClick={(e) => e.stopPropagation()}
                   />
                 </Dropdown>
@@ -348,22 +370,125 @@ function MediaNode({ data, selected }) {
             </Flex>
           </div>
 
-          <div className="card-body"  style={{background:"rgba(255, 255, 255, 0.8)",borderRadius:"14px",width:"210px"}}>
-            <Image
+          <div className="card-body" style={{ width: 200 }}>
+            <Flex
+              Direction="column"
+              gap={2}
               style={{
-                marginTop: "3px",
-                borderRadius: "14px",
-                width: "210px",
-                height: "100px",
-                // objectFit: "cover",
+                padding: "0",
               }}
-              preview={false}
-              alt="example"
-              src={
-                alldata?.data?.mediaUrl ||
-                "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
-              }
-            />
+            >
+              {/* {alldata?.data?.mediaArray?.length > 0 ? (
+                alldata?.data?.mediaArray.map((media, index) => (
+                  <>
+                    <Flex
+                      vertical
+                      gap={12}
+                      style={{
+                        width: "50%",
+                        // background: "rgba(255, 255, 255, 0.7)",
+                        display: "flex",
+                        flexDirection: "column",
+                        // marginTop: "3px",
+                        
+                      }}
+                    >
+                      <Image
+                        key={index}
+                        src={
+                          media.url ||
+                          "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
+                        }
+                        alt={media.name || "media image"}
+                        style={{
+                          marginTop: "3px",
+                          borderRadius: "14px",
+                          width: "200px",
+                          height: "150px",
+                          // objectFit: "cover",
+                        }}
+                        preview={false}
+                      />
+                    </Flex>
+                  </>
+                ))
+
+              ) : (
+                <Image
+                  src={
+                    "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
+                  }
+                  alt="example"
+                  style={{
+                    marginTop: "3px",
+                    borderRadius: "14px",
+                    width: "200px",
+                    height: "100px",
+                    objectFit: "cover",
+                  }}
+                  preview={false}
+                />
+              )} */}
+
+              {alldata?.data?.mediaArray?.length > 0 ? (
+                <Swiper
+                  effect={"coverflow"}
+                  grabCursor={true}
+                  centeredSlides={true}
+                  slidesPerView={3}
+                  loop={true}
+                  modules={[EffectCoverflow]}
+                  pagination={{ clickable: true }}
+                  coverflowEffect={{
+                    rotate: 0,
+                    stretch: 0,
+                    depth: 120,
+                    modifier: 2,
+                    slideShadows: false,
+                  }}
+                  className="carousel-container"
+                  onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
+                >
+                  {alldata?.data?.mediaArray.map((slide, index) => (
+                    <SwiperSlide
+                      key={index}
+                      onClick={() => handleSlideClick(index)}
+                      style={{
+                        cursor: "pointer",
+                        transform:
+                          activeSlide === index ? "scale(1.1)" : "scale(0.9)",
+                      }}
+                    >
+                      <img
+                        src={slide.url}
+                        alt={`Media ${index}`}
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                          borderRadius: "14px",
+                        }}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              ) : (
+                <Image
+                  src={
+                    "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
+                  }
+                  alt="example"
+                  style={{
+                    marginTop: "3px",
+                    borderRadius: "14px",
+                    width: "200px",
+                    height: "100px",
+                    objectFit: "cover",
+                  }}
+                  preview={false}
+                />
+              )}
+            </Flex>
             <Handle
               type={
                 alldata?.data?.isStartNode || data.isStartNode
@@ -381,7 +506,7 @@ function MediaNode({ data, selected }) {
                 left: alldata?.data?.isStartNode ? "auto" : "-8px",
                 right: alldata?.data?.isStartNode ? "-6px" : "auto",
                 border: "none",
-                top: "72%",
+                top: "60%",
                 height: "50px",
                 zIndex: 10,
                 transform: "translateY(-50%)",
@@ -394,33 +519,34 @@ function MediaNode({ data, selected }) {
                 position: "relative",
                 alignItems: "center",
                 justifyContent: "center",
-                top: "-28px",
-                left: alldata?.data?.isStartNode ? "auto" : "-106px",
-                right: alldata?.data?.isStartNode ? "-100px" : "auto",
+                top: "-50px",
+                // left:"-50.1%",
+                // right:"-50.1%",
+
+                left: alldata?.data?.isStartNode ? "auto" : "-50.1%",
+                right: alldata?.data?.isStartNode ? "-50.1%" : "null",
               }}
             >
-              {isConnectedToStartNode ? (
-                <Badge status="success" />
+              {data?.isStartNode || alldata?.data?.isStartNode ? (
+                <>
+                  {connected ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </>
               ) : (
-                <Badge status="processing" />
+                <>
+                  {isConnectedToStartNode ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </>
               )}
             </div>
-
-            {/* <Paragraph
-              style={{
-                lineHeight: "1.00",
-                padding: "5px 5px 20px 5px",
-              }}
-            >
-              <small
-                dangerouslySetInnerHTML={{
-                  __html:
-                    alldata?.data?.label?.replace(/\n/g, "<br/>") || "message",
-                }}
-              ></small>
-            </Paragraph> */}
           </div>
-        {/* </Card> */}
+        </Card>
       </div>
     </ConfigProvider>
   );
