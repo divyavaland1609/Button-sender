@@ -304,7 +304,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
             // onChange={(e) => setFooterTitle(e.target.value)}
           />
         </Form.Item>
-        <Form.Item label="List Title">
+        {/* <Form.Item label="List Title">
           <Input
             size="small"
             placeholder="Enter List Title"
@@ -312,7 +312,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
             onChange={handleListTitleChange}
             // onChange={(e) => setFooterTitle(e.target.value)}
           />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           label={
             <>
@@ -328,7 +328,6 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
                 src={imageUrl?.response?.url || imageUrl}
                 alt="avatar"
                 style={{
-                  objectFit: "scale-down",
                   width: "100%",
                   height: 50,
                 }}
