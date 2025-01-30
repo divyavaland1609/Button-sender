@@ -28,15 +28,17 @@ import {
   PhoneOutlined,
   SendOutlined,
   SyncOutlined,
+  UnorderedListOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 
 const ChatFlow = ({ styles, nodeData, edges }) => {
   const [chats, setChats] = useState([]);
   const [open, setOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [currentNodeId, setCurrentNodeId] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState([]);
-
+ const nodeRef = useRef (null);
   const chatContainerRef = useRef(null);
   useEffect(() => {
     if (nodeData && Array.isArray(nodeData)) {
@@ -85,6 +87,19 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
     return null;
   };
 
+  const handleClickOutside = (event) => {
+    if (nodeRef.current && !nodeRef.current.contains(event.target)) {
+      setIsDrawerOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleOptionChange = (e) => {
     const value = e.target.value;
 
@@ -95,12 +110,10 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
           : [...prev, value]
       );
     } else {
-      // Clear previous selections and set the new single value
       setSelectedOptions([value]);
     }
   };
 
-  // Handle button click to move to the next node
   const handleButtonClick = (buttonTitle, currentNodeId, type, handle) => {
     setChats((prevChats) => [
       ...prevChats,
@@ -210,11 +223,9 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                   item.originData.actions.map((btn, i) => (
                     <React.Fragment key={`action-${i}`}>
                       <Button
-                        // className="btn"
                         size="small"
                         block
                         type="text"
-                        // color="primary"
                         onClick={() =>
                           handleButtonClick(
                             btn.title,
@@ -290,34 +301,33 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
         return (
           <div className="chat-message media-message">
             {/* <Card title={item?.originData?.label} bordered={false}> */}
-              <div
-                style={{
-                  padding: "0px 0px 0px 0px",
-                }}
-                className="message-text"
-                dangerouslySetInnerHTML={{
-                  __html:
-                    item?.originData?.question?.replace(/\n/g, "<br/>") ||
-                    "question",
-                }}
-              />
-              {item?.originData?.allowMultiple ? (
-                <Checkbox.Group style={{ width: "100%" }}>
-                  <RenderOptions item={item} />
-                </Checkbox.Group>
-              ) : (
-                <Radio.Group
-                  onChange={handleOptionChange}
-                  value={selectedOptions[0]}
-                  style={{ width: "100%" }}
-                >
-                  <RenderOptions item={item} />
-                </Radio.Group>
-              )}
+            <div
+              style={{
+                padding: "0px 0px 0px 0px",
+              }}
+              className="message-text"
+              dangerouslySetInnerHTML={{
+                __html:
+                  item?.originData?.question?.replace(/\n/g, "<br/>") ||
+                  "question",
+              }}
+            />
+            {item?.originData?.allowMultiple ? (
+              <Checkbox.Group style={{ width: "100%" }}>
+                <RenderOptions item={item} />
+              </Checkbox.Group>
+            ) : (
+              <Radio.Group
+                onChange={handleOptionChange}
+                value={selectedOptions[0]}
+                style={{ width: "100%" }}
+              >
+                <RenderOptions item={item} />
+              </Radio.Group>
+            )}
             {/* </Card> */}
           </div>
         );
-
 
       case "Text":
         return (
@@ -342,8 +352,8 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
             />
           </div>
         );
-      
-        case "list":
+
+      case "list":
         return (
           <div
             className={`chat-message ${
@@ -358,8 +368,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                 display: "flex",
                 flexDirection: "column",
                 fontWeight: "bold",
-                lineHeight:"1.2"
-
+                lineHeight: "1.2",
               }}
               className="message-text"
               dangerouslySetInnerHTML={{
@@ -372,8 +381,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                lineHeight:"1.2"
-
+                lineHeight: "1.2",
               }}
               className="message-text"
               dangerouslySetInnerHTML={{
@@ -386,8 +394,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                lineHeight:"1.2"
-
+                lineHeight: "1.2",
               }}
               className="message-text"
               dangerouslySetInnerHTML={{
@@ -402,6 +409,58 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
               ""
             )}
             <Button
+              onClick={() => {
+                setIsDrawerOpen(!isDrawerOpen); // Toggle the drawer visibility
+                setOpen(!open); // Toggle the title visibility (close the title)
+              }}
+              type="text"
+              block
+            >
+              <UnorderedListOutlined />
+              {item?.originData?.listTitle ?? "Menu Title"}
+            </Button>
+
+            {isDrawerOpen && (
+              <>
+                <Title
+                  style={{ fontSize: "10px", margin: "2px", color: "blue" }}
+                >
+                  {" "}
+                  Menu Middle Title
+                </Title>
+
+                <div>
+                  {item?.originData?.actions?.map((action, i) => (
+                    <div key={i}>
+                      <Flex vertical style={{ padding: "6px" }}>
+                        <Text
+                          style={{
+                            justifyContent: "center",
+                            fontSize: "11px",
+                          }}
+                        >
+                          {action.title || `List ${i + 1}`}
+                        </Text>
+                        <Text
+                          style={{
+                            justifyContent: "center",
+                            fontSize: "11px",
+                            color: "grey",
+                          }}
+                        >
+                          {action.description}
+                        </Text>
+                      </Flex>
+
+                      {i < alldata?.data?.actions.length - 1 && (
+                        <Divider style={{ margin: 5 }} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+            {/* <Button
               size="small"
               block
               type="text"
@@ -418,27 +477,26 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                 }}
               />
               List
-            </Button>
-            <Drawer
-                title="Drawer Inside Node"
-                placement="bottom"
-                open={open}
-                // onClose={onClose}
-                mask={false} // Prevents overlay issues
-                getContainer={false} // Render inside the node
-                style={{
-                  height: "100px",
-                }}
-              >
-                <p>Node-specific content</p>
-              </Drawer>
+            </Button> */}
+            {/* <Drawer
+              title="Drawer Inside Node"
+              placement="bottom"
+              open={open}
+              mask={false}
+              getContainer={false}
+              style={{
+                height: "100px",
+              }}
+            >
+              <p>Node-specific content</p>
+            </Drawer> */}
             {/* {Array.isArray(item.originData.actions) &&
               item.originData.actions.length > 1 && (
                 <Divider style={{ margin: "0px" }} />
               )} */}
           </div>
         );
-        
+
       default:
         return (
           <div className="chat-message text-message">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Handle, Position } from "@xyflow/react";
 import {
   Card,
@@ -50,8 +50,10 @@ const ListNode = ({ data, selected }) => {
   const [enabled, setEnabled] = useState(true);
   const [isConnectedToStartNode, setIsConnectedToStartNode] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const { token } = theme.useToken();
+  const nodeRef = useRef(null);
   const checkParentNodesForStart = (nodeId) => {
     const parentEdges = edges.filter((edge) => edge.target === nodeId);
     if (parentEdges.length === 0) return false;
@@ -156,6 +158,10 @@ const ListNode = ({ data, selected }) => {
       : "none",
   };
 
+  const showDrawer = () => {
+    setIsDrawerOpen(true);
+  };
+
   const items = [
     alldata?.data?.isStartNode
       ? {
@@ -216,12 +222,25 @@ const ListNode = ({ data, selected }) => {
     },
   ];
 
-  const showDrawer = () => {
-    setOpen(true);
+  const handleClickOutside = (event) => {
+    if (nodeRef.current && !nodeRef.current.contains(event.target)) {
+      setIsDrawerOpen(false); // Close the drawer if clicked outside
+    }
   };
+
+  // const showDrawer = () => {
+  //   setOpen(true);
+  // };
   const onClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const containerStyle = {
     position: "relative",
@@ -399,14 +418,6 @@ const ListNode = ({ data, selected }) => {
                 {alldata?.data?.menuTitle ?? "Header Title"}
               </Title>
               <Text
-                style={{
-                  paddingLeft: "10px",
-                }}
-              >
-                {alldata?.data?.middleTitle ?? "Menu Middle Title"}
-              </Text>
-              <br />
-              <Text
                 type="secondary"
                 style={{
                   display: "block",
@@ -415,43 +426,156 @@ const ListNode = ({ data, selected }) => {
               >
                 {alldata?.data?.footerTitle ?? "Footer Title"}
               </Text>
-
-              <Button onClick={showDrawer} type="text" block>
+              <Button
+                onClick={() => {
+                  setIsDrawerOpen(!isDrawerOpen);
+                  setOpen(!open);
+                }}
+                type="text"
+                block
+              >
                 <UnorderedListOutlined />
                 {alldata?.data?.listTitle ?? "Menu Title"}
               </Button>
 
-              <Title style={{ fontSize: "10px", margin: "2px", color: "blue" }}>
-                {" "}
-                Menu Middle Title
-              </Title>
-              {alldata?.data?.actions?.map((action, i) => (
-                <div key={i}>
-                  <Flex vertical>
-                    <Text
-                      style={{
-                        justifyContent: "center",
-                        fontSize: "11px",
-                      }}
-                    >
-                      {action.title || `List ${i + 1}`}
-                    </Text>
-                    <Text
-                      style={{
-                        justifyContent: "center",
-                        fontSize: "11px",
-                        color: "grey",
-                      }}
-                    >
-                      {action.description}
-                    </Text>
-                  </Flex>
+              {isDrawerOpen && (
+                <>
+                  <Title
+                    style={{
+                      fontSize: "10px",
+                      margin: "2px",
+                      color: "blue",
+                      padding: "3px",
+                    }}
+                  >
+                    {" "}
+                    {alldata?.data?.middleTitle ?? "Menu Middle Title"}
+                  </Title>
 
-                  {i < alldata?.data?.actions.length - 1 && (
-                    <Divider style={{ margin: 5 }} />
-                  )}
-                </div>
-              ))}
+                  <div>
+                    {alldata?.data?.actions?.map((action, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          position: "relative",
+                        }}
+                      >
+                        {/* Handle for each action */}
+                        <Handle
+                          id={`handle-${i}`}
+                          type="source"
+                          position={Position.Right}
+                          isConnectable
+                          style={{
+                            background: "transparent",
+                            position: "absolute",
+                            width: "18px",
+                            border: "none",
+                            right: "-11px",
+                            top: "50%",
+                            height: "37px",
+                            zIndex: 10,
+                            transform: "translateY(-50%)",
+                            visibility: alldata?.data?.isStartNode
+                              ? "visible"
+                              : "visible",
+                          }}
+                        />
+                        <div
+                          style={{
+                            height: "6px",
+                            display: "flex",
+                            position: "absolute",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            top: "45%",
+                            left: alldata?.data?.isStartNode ? "auto" : "197px",
+                            right: alldata?.data?.isStartNode ? "-5px" : "",
+                          }}
+                        >
+                          {data?.isStartNode || alldata?.data?.isStartNode ? (
+                            <>
+                              {isConnected ? (
+                                <Badge status="success" />
+                              ) : (
+                                <Badge status="processing" />
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {isConnectedToStartNode ? (
+                                <Badge status="success" />
+                              ) : (
+                                <Badge status="processing" />
+                              )}
+                            </>
+                          )}
+                        </div>
+                        {/* <Handle
+                          type="target"
+                          position={Position.Left}
+                          isConnectable
+                          style={{
+                            background: "transparent",
+                            position: "absolute",
+                            width: "20px",
+                            left: "-10px",
+                            border: "none",
+                            top: "50%",
+                            height: "40px",
+                            zIndex: 10,
+                            transform: "translateY(-50%)",
+                          }}
+                        /> */}
+
+                        <Flex vertical style={{ padding: "6px" }}>
+                          <Text
+                            style={{
+                              justifyContent: "center",
+                              fontSize: "11px",
+                            }}
+                          >
+                            {action.title || `List ${i + 1}`}
+                          </Text>
+                          <Text
+                            style={{
+                              justifyContent: "center",
+                              fontSize: "11px",
+                              color: "grey",
+                            }}
+                          >
+                            {action.description}
+                          </Text>
+                        </Flex>
+
+                        {/* Badge Indicator */}
+                        {/* <div
+                          style={{
+                            height: "6px",
+                            display: "flex",
+                            position: "absolute",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            top: "50%",
+                            left: "-18px",
+                            transform: "translateY(-50%)",
+                          }}
+                        >
+                          {isConnected || isConnectedToStartNode ? (
+                            <Badge status="success" />
+                          ) : (
+                            <Badge status="processing" />
+                          )}
+                        </div> */}
+
+                        {/* {i < alldata?.data?.actions.length - 1 && (
+                          <Divider style={{ margin: 5 }} />
+                        )} */}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </Typography>
           </div>
         </div>
