@@ -302,7 +302,7 @@ function MediaNode({ data, selected }) {
       <div
         style={{
           borderRadius: "16px",
-          paddingTop: "1px",
+          paddingTop: "-1px",
           ...nodeStyle,
         }}
         onMouseEnter={() => {
@@ -371,13 +371,8 @@ function MediaNode({ data, selected }) {
           </div>
 
           <div className="card-body" style={{ width: 200 }}>
-            <Flex
-              Direction="column"
-              gap={2}
-              style={{
-                padding: "0",
-              }}
-            >
+            <>
+         
               {/* {alldata?.data?.mediaArray?.length > 0 ? (
                 alldata?.data?.mediaArray.map((media, index) => (
                   <>
@@ -431,50 +426,77 @@ function MediaNode({ data, selected }) {
               )} */}
 
               {alldata?.data?.mediaArray?.length > 0 ? (
-              <Swiper
-              effect={"coverflow"}
-              grabCursor={true}
-              centeredSlides={true}
-              slidesPerView={3}
-              loop={true}
-              modules={[EffectCoverflow]}
-              pagination={{ clickable: true }}
-              coverflowEffect={{
-                rotate: 0,
-                stretch: 0,
-                depth: 120,
-                modifier: 2,
-                slideShadows: false,
-              }}
-              className="carousel-container"
-              onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
-            >
-              {alldata?.data?.mediaArray.map((slide, index) => (
-                <SwiperSlide
-                  key={index}
-                  onClick={() => handleSlideClick(index)}
-                  style={{
-                    cursor: "pointer",
-                  
-                    width: "  5.6667px", // Set width of each slide
-                    transform:
-                      activeSlide === index ? "scale(1.1) translateX(-50%)" : "scale(0.9) translateX(0)",
+                <Swiper
+                  effect={"coverflow"}
+                  grabCursor={true}
+                  centeredSlides={true}
+                  slidesPerView={3}
+                  loop={true}
+                  modules={[EffectCoverflow]}
+                  pagination={{ clickable: true }}
+                  coverflowEffect={{
+                    rotate: 0,
+                    stretch: 0,
+                    depth: 120,
+                    modifier: 2,
+                    slideShadows: false,
                   }}
+                  className="carousel-container"
+                  style={{marginBottom:"-6px"}}
+                  onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
                 >
-                  <img
-                    src={slide.url}
-                    alt={`Media ${index}`}
-                    style={{
-                      width: "190px",
-                      height: "100px",
-                      objectFit: "cover",
-                      borderRadius: "14px",
-                    }}
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            
+                  {alldata?.data?.mediaArray.map((slide, index) => (
+                    <SwiperSlide
+                      key={index}
+                      onClick={() => handleSlideClick(index)}
+                      style={{
+                        cursor: "pointer",
+                        transform:
+                          activeSlide === index ? "scale(1.1)" : "scale(0.9)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <img
+                          src={slide.url}
+                          alt={`Media ${index}`}
+                          style={{
+                            width: "248%", // 90% screen width lega
+                            maxWidth: "900px", // Max width set kar sakte hain
+                            height: "auto", // Auto height maintain karega
+                            objectFit: "cover",
+                            borderRadius: "14px",
+                            marginTop:"5px",
+                          }}
+                        />
+                      </div>
+                      {/* <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <img
+                          src={slide.url}
+                          alt={`Media ${index}`}
+                          style={{
+                            width: "250px",
+                            height: "100px", 
+                            objectFit: "cover",
+                            borderRadius: "14px",
+                            marginTop:"5px"
+                          }}
+                        />
+                      </div> */}
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               ) : (
                 <Image
                   src={
@@ -491,7 +513,7 @@ function MediaNode({ data, selected }) {
                   preview={false}
                 />
               )}
-            </Flex>
+            </>
             <Handle
               type={
                 alldata?.data?.isStartNode || data.isStartNode
