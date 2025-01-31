@@ -57,11 +57,11 @@ function MediaNode({ data, selected }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isConnectedToStartNode, setIsConnectedToStartNode] = useState(false);
   const [isRightHandleConnected, setIsRightHandleConnected] = useState(false);
-  const [activeSlide, setActiveSlide] = useState(0);
+  // const [activeSlide, setActiveSlide] = useState(0);
 
-  const handleSlideClick = (index) => {
-    setActiveSlide(index);
-  };
+  // const handleSlideClick = (index) => {
+  //   setActiveSlide(index);
+  // };
   const checkParentNodesForStart = (nodeId) => {
     const parentEdges = edges.filter((edge) => edge.target === nodeId);
     if (parentEdges.length === 0) return false;
@@ -443,16 +443,16 @@ function MediaNode({ data, selected }) {
                   }}
                   className="carousel-container"
                   style={{marginBottom:"-6px"}}
-                  onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
+                  // onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
                 >
                   {alldata?.data?.mediaArray.map((slide, index) => (
                     <SwiperSlide
                       key={index}
-                      onClick={() => handleSlideClick(index)}
+                      // onClick={() => handleSlideClick(index)}
                       style={{
                         cursor: "pointer",
-                        transform:
-                          activeSlide === index ? "scale(1.1)" : "scale(0.9)",
+                        // transform:
+                        //   activeSlide === index ? "scale(1.1)" : "scale(0.9)",
                       }}
                     >
                       <div
@@ -468,7 +468,7 @@ function MediaNode({ data, selected }) {
                           style={{
                             width: "248%", // 90% screen width lega
                             maxWidth: "900px", // Max width set kar sakte hain
-                            height: "auto", // Auto height maintain karega
+                            height: "120px", // Auto height maintain karega
                             objectFit: "cover",
                             borderRadius: "14px",
                             marginTop:"5px",

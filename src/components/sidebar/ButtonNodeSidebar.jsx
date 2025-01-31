@@ -129,26 +129,26 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
   const addNewCard = () => {
     if (data.actions.length < 5) {
       setData((prev) => {
-        let newType = "quick"; 
+        let newType = "quick";
         if (prev.actions.length === 3) {
           newType = "call";
         } else if (prev.actions.length === 4) {
-          newType = "url"; 
+          newType = "url";
         }
-  
+
         const value = {
           ...prev,
           actions: [
             ...prev.actions,
             {
               id: prev.actions.length,
-              type: newType, 
+              type: newType,
               title: "",
               payload: "",
             },
           ],
         };
-  
+
         const data = { selectedNode, value: value.actions, key: "actions" };
         dispatch(setUpdateNodeData(data));
         return value;
@@ -157,7 +157,7 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
       message.warning("Cannot add more than 5 buttons");
     }
   };
-  
+
   // const addNewCard = () => {
   //   if (data.actions.length < 5) {
   //     setData((prev) => {
@@ -181,7 +181,6 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
   //     message.warning("Cannot add more than 5 buttons");
   //   }
   // };
-  
 
   // const deleteCard = (index) => {
   //   if (data.actions.length > 1) {
@@ -198,26 +197,30 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
   //   }
   // };
 
+  const deleteCard = (index) => {
+    if (data.actions.length > 1) {
+      setData((prev) => {
+        const value = [...prev.actions]
+          .filter((_, i) => i !== index)
+          .map((item, i) => ({ ...item, id: i }));
+        const data = { selectedNode, value, key: "actions" };
+        dispatch(setUpdateNodeData(data));
+        return { ...prev, actions: value };
+      });
+    } else {
+      message.warning("Buttons must be greater than 1");
+    }
+  };
 
-  
-const deleteCard = (index) => {
-  if (data.actions.length > 1) {
-    setData((prev) => {
-      const value = [...prev.actions]
-        .filter((_, i) => i !== index)
-        .map((item, i) => ({ ...item, id: i }));
-      const data = { selectedNode, value, key: "actions" };
-      dispatch(setUpdateNodeData(data));
-      return { ...prev, actions: value };
-    });
-  } else {
-    message.warning("Buttons must be greater than 1");
-  }
-};
-
-const quickReplyCount = data.actions.filter(btn => btn.type === "quick").length;
-const quickReplyCount1 = data.actions.filter(btn => btn.type === "call").length;
-const quickReplyCount2 = data.actions.filter(btn => btn.type === "url").length;
+  const quickReplyCount = data.actions.filter(
+    (btn) => btn.type === "quick"
+  ).length;
+  const quickReplyCount1 = data.actions.filter(
+    (btn) => btn.type === "call"
+  ).length;
+  const quickReplyCount2 = data.actions.filter(
+    (btn) => btn.type === "url"
+  ).length;
 
   const selectBefore = (
     <Select defaultValue="http://">
@@ -355,7 +358,6 @@ const quickReplyCount2 = data.actions.filter(btn => btn.type === "url").length;
               <img
                 src={imageUrl?.response?.url || imageUrl}
                 alt="avatar"
-                
                 style={{
                   width: "100%",
                   height: 50,
@@ -483,16 +485,28 @@ const quickReplyCount2 = data.actions.filter(btn => btn.type === "url").length;
                       <Form.Item name={`button-type-${index}`} label="Action">
                         <Select
                           size="small"
-                          defaultValue="quick"
+                          defaultValue={btn.type}
                           value={btn.type}
                           onChange={(value) =>
                             handleChange(index, "type", value)
                           }
                           style={{ width: "100%" }}
                           options={[
-                            { value: "quick", label: "Quick Reply", disabled: quickReplyCount >= 3 },
-                            { value: "call", label: "Call Button", disabled: quickReplyCount1 >= 1 },
-                            { value: "url", label: "URL Button", disabled: quickReplyCount2 >= 1 },
+                            {
+                              value: "quick",
+                              label: "Quick Reply",
+                              disabled: quickReplyCount >= 3,
+                            },
+                            {
+                              value: "call",
+                              label: "Call Button",
+                              disabled: quickReplyCount1 >= 1,
+                            },
+                            {
+                              value: "url",
+                              label: "URL Button",
+                              disabled: quickReplyCount2 >= 1,
+                            },
                             { value: "unsubcribe", label: "UnSubcribe" },
                           ]}
                         />
