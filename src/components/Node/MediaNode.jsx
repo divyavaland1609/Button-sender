@@ -302,7 +302,7 @@ function MediaNode({ data, selected }) {
       <div
         style={{
           borderRadius: "16px",
-          paddingTop: "1px",
+          paddingTop: "-1px",
           ...nodeStyle,
         }}
         onMouseEnter={() => {
@@ -371,13 +371,8 @@ function MediaNode({ data, selected }) {
           </div>
 
           <div className="card-body" style={{ width: 200 }}>
-            <Flex
-              Direction="column"
-              gap={2}
-              style={{
-                padding: "0",
-              }}
-            >
+            <>
+         
               {/* {alldata?.data?.mediaArray?.length > 0 ? (
                 alldata?.data?.mediaArray.map((media, index) => (
                   <>
@@ -447,6 +442,7 @@ function MediaNode({ data, selected }) {
                     slideShadows: false,
                   }}
                   className="carousel-container"
+                  style={{marginBottom:"-6px"}}
                   onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
                 >
                   {alldata?.data?.mediaArray.map((slide, index) => (
@@ -459,16 +455,45 @@ function MediaNode({ data, selected }) {
                           activeSlide === index ? "scale(1.1)" : "scale(0.9)",
                       }}
                     >
-                      <img
-                        src={slide.url}
-                        alt={`Media ${index}`}
+                      <div
                         style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                          borderRadius: "14px",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
                         }}
-                      />
+                      >
+                        <img
+                          src={slide.url}
+                          alt={`Media ${index}`}
+                          style={{
+                            width: "248%", // 90% screen width lega
+                            maxWidth: "900px", // Max width set kar sakte hain
+                            height: "auto", // Auto height maintain karega
+                            objectFit: "cover",
+                            borderRadius: "14px",
+                            marginTop:"5px",
+                          }}
+                        />
+                      </div>
+                      {/* <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <img
+                          src={slide.url}
+                          alt={`Media ${index}`}
+                          style={{
+                            width: "250px",
+                            height: "100px", 
+                            objectFit: "cover",
+                            borderRadius: "14px",
+                            marginTop:"5px"
+                          }}
+                        />
+                      </div> */}
                     </SwiperSlide>
                   ))}
                 </Swiper>
@@ -488,7 +513,7 @@ function MediaNode({ data, selected }) {
                   preview={false}
                 />
               )}
-            </Flex>
+            </>
             <Handle
               type={
                 alldata?.data?.isStartNode || data.isStartNode
