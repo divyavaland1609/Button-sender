@@ -70,13 +70,16 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
   const [templateName, setTemplateName] = useState(
     alldata?.data?.templateName ?? ""
   );
-
+  const [footerTitle, setFooterTitle] = useState(
+    alldata?.data?.footerTitle ?? ""
+  );
   useEffect(() => {
     const alldata = nodes.find((item) => item.id === selectedNode);
     if (alldata) {
       setTemplateName(alldata?.data?.templateName ?? "Text with Button");
       setMessage(alldata?.data?.label ?? "");
       setImageUrl(alldata?.data?.mediaUrl ?? "");
+      setFooterTitle(alldata?.data?.footerTitle?? " ");
     }
   }, [selectedNode, nodes]);
 
@@ -111,6 +114,14 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
     const data = { selectedNode, value, key: "templateName" };
     dispatch(setUpdateNodeData(data));
   };
+
+  const handleFooterTitleChange = (e) => {
+    const value = e.target.value;
+    setFooterTitle(value);
+    const data = { selectedNode, value, key: "footerTitle" };
+    dispatch(setUpdateNodeData(data));
+  };
+
   const handleChange = (index, key, val) => {
     setData((prev) => {
       const actions = [...prev.actions];
@@ -126,53 +137,29 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
     });
   };
 
-  const addNewCard = () => {
-    if (data.actions.length < 5) {
-      setData((prev) => {
-        let newType = "quick";
-        if (prev.actions.length === 3) {
-          newType = "call";
-        } else if (prev.actions.length === 4) {
-          newType = "url";
-        }
-
-        const value = {
-          ...prev,
-          actions: [
-            ...prev.actions,
-            {
-              id: prev.actions.length,
-              type: newType,
-              title: "",
-              payload: "",
-            },
-          ],
-        };
-
-        const data = { selectedNode, value: value.actions, key: "actions" };
-        dispatch(setUpdateNodeData(data));
-        return value;
-      });
-    } else {
-      message.warning("Cannot add more than 5 buttons");
-    }
-  };
-
   // const addNewCard = () => {
   //   if (data.actions.length < 5) {
   //     setData((prev) => {
+  //       let newType = "quick";
+  //       if (prev.actions.length === 3) {
+  //         newType = "call";
+  //       } else if (prev.actions.length === 4) {
+  //         newType = "url";
+  //       }
+
   //       const value = {
   //         ...prev,
   //         actions: [
   //           ...prev.actions,
   //           {
   //             id: prev.actions.length,
-  //             type: "quick",
+  //             type: newType,
   //             title: "",
   //             payload: "",
   //           },
   //         ],
   //       };
+
   //       const data = { selectedNode, value: value.actions, key: "actions" };
   //       dispatch(setUpdateNodeData(data));
   //       return value;
@@ -181,6 +168,30 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
   //     message.warning("Cannot add more than 5 buttons");
   //   }
   // };
+
+  const addNewCard = () => {
+    if (data.actions.length < 5) {
+      setData((prev) => {
+        const value = {
+          ...prev,
+          actions: [
+            ...prev.actions,
+            {
+              id: prev.actions.length,
+              type: "quick",
+              title: "",
+              payload: "",
+            },
+          ],
+        };
+        const data = { selectedNode, value: value.actions, key: "actions" };
+        dispatch(setUpdateNodeData(data));
+        return value;
+      });
+    } else {
+      message.warning("Cannot add more than 5 buttons");
+    }
+  };
 
   // const deleteCard = (index) => {
   //   if (data.actions.length > 1) {
@@ -215,10 +226,10 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
   const quickReplyCount = data.actions.filter(
     (btn) => btn.type === "quick"
   ).length;
-  const quickReplyCount1 = data.actions.filter(
+  const callButtonCount = data.actions.filter(
     (btn) => btn.type === "call"
   ).length;
-  const quickReplyCount2 = data.actions.filter(
+  const urlButtonCount = data.actions.filter(
     (btn) => btn.type === "url"
   ).length;
 
@@ -395,6 +406,28 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
             value={message1}
           /> */}
         </Form.Item>
+        <Form.Item
+          name="footer Title"
+          label="Footer Title"
+          value={footerTitle}
+          // initialValue={btn.payload}
+          rules={[
+            {
+              required: true,
+              message: "Footer Title is required",
+            },
+            
+          ]}
+        >
+          <Input
+            size="small"
+            required={true}
+            // addonBefore={selectBefore}
+            // value={btn.payload}
+            onChange={handleFooterTitleChange}
+            placeholder="Enter Footer Title"
+          />
+        </Form.Item>
         {/* <br /> */}
         <Flex justify="space-between" align="center">
           {/* <Form.Item label="Button Label" /> */}
@@ -403,6 +436,7 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
             <PlusOutlined /> Add
           </Button>
         </Flex>
+       
         <div style={{ paddingTop: "5px" }}>
           {data?.actions?.map((btn, index, action) => (
             <Card
@@ -500,14 +534,18 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
                             {
                               value: "call",
                               label: "Call Button",
-                              disabled: quickReplyCount1 >= 1,
+                              disabled:
+                                callButtonCount >= 3 ||
+                                callButtonCount + urlButtonCount >= 3,
                             },
                             {
                               value: "url",
                               label: "URL Button",
-                              disabled: quickReplyCount2 >= 1,
+                              disabled:
+                                urlButtonCount >= 3 ||
+                                callButtonCount + urlButtonCount >= 3,
                             },
-                            { value: "unsubcribe", label: "UnSubcribe" },
+                            { value: "unsubcribe", label: "Unsubscribe" },
                           ]}
                         />
                       </Form.Item>
@@ -531,6 +569,7 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
                       >
                         <Input
                           size="small"
+                          disabled={btn?.type === "unsubcribe"}
                           style={{ fontSize: "15px" }}
                           value={btn.title}
                           onChange={(e) =>

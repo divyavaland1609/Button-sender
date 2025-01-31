@@ -18,6 +18,7 @@ import { setUpdateNodeData } from "../../redux/nodesSlice";
 
 import {
   ArrowRightOutlined,
+  BellOutlined,
   CalendarOutlined,
   CopyOutlined,
   DeleteOutlined,
@@ -394,8 +395,7 @@ const ButtonNode = ({ data, selected }) => {
               alt="Media not found"
               preview={false}
             />
-          ) : 
-          null}
+          ) : null}
           <Paragraph
             style={{
               padding: "10px 10px 0px 10px",
@@ -406,7 +406,15 @@ const ButtonNode = ({ data, selected }) => {
               {alldata?.data?.label?.replace(/\n/g, "<br/>") || "message"}
             </small>
           </Paragraph>
-
+          <Paragraph
+            type="secondary"
+            style={{
+              padding: "0px 10px",
+              // padding: "8px",
+            }}
+          >
+            <small>{alldata?.data?.footerTitle || "footer Title"}</small>
+          </Paragraph>
           {alldata?.data?.actions?.length > 0 ? (
             <>
               {alldata?.data?.actions?.map((btn, i) => (
@@ -481,14 +489,9 @@ const ButtonNode = ({ data, selected }) => {
                         <LinkOutlined /> {btn?.title}
                       </Typography.Text>
                     )}
-                    {btn.type === "location" && (
+                    {btn.type === "unsubcribe" && (
                       <Typography.Text>
-                        <EnvironmentOutlined /> {btn?.title}
-                      </Typography.Text>
-                    )}
-                    {btn.type === "calendar" && (
-                      <Typography.Text>
-                        <CalendarOutlined /> {btn?.title}
+                        <BellOutlined /> {"Unsubscribe"}
                       </Typography.Text>
                     )}
                   </Button>

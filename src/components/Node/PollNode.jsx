@@ -20,6 +20,7 @@ import {
 } from "antd";
 import {
   ArrowRightOutlined,
+  CheckOutlined,
   CopyOutlined,
   DeleteOutlined,
   DisconnectOutlined,
@@ -669,149 +670,215 @@ function PollNode({ data, selected }) {
           {alldata?.data?.answers ? (
             <Col span={24}>
               {alldata?.data?.allowMultiple ? (
-                <Checkbox.Group style={{ width: "100%" }}>
-                  <RenderOptions />
-                </Checkbox.Group>
+                <>
+                  <Paragraph
+                    style={{
+                      lineHeight: "1.00",
+                      padding: "0px 10px",
+                    }}
+                  >
+                    <small>{"Select Multiple"}</small>
+                  </Paragraph>
+
+                  <Checkbox.Group style={{ width: "100%" }}>
+                    <RenderOptions />
+                  </Checkbox.Group>
+                </>
               ) : (
-                <Radio.Group
-                  onChange={handleOptionChange}
-                  value={selectedOptions[0]}
-                  style={{ width: "100%", }}
-                >
-                  <RenderOptions />
-                </Radio.Group>
+                <>
+                  <Paragraph
+                    style={{
+                      lineHeight: "1.00",
+                      padding: "0px 10px",
+                    }}
+                  >
+                    <small>{"Select One"}</small>
+                  </Paragraph>
+                  <Radio.Group
+                    onChange={handleOptionChange}
+                    value={selectedOptions[0]}
+                    style={{ width: "100%" }}
+                  >
+                    <RenderOptions />
+                  </Radio.Group>
+                </>
               )}
             </Col>
           ) : (
             <>
-            {/* First Answer */}
-            <div style={{ position: "relative", marginBottom: "8px" }}>
-              <Row
-                style={{
-                  width: "100%",
-                  padding: "0px 10px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Col>
-                  <Radio onChange={handleOptionChange}>{`option 1`}</Radio>
-                </Col>
-                <Col>
-                  <Avatar icon={<UserOutlined />} size="small" />
-                </Col>
-              </Row>
-          
-              <Progress
-                showInfo={false}
-                percent={0}
-                strokeColor={"#87d068"}
-                strokeWidth={10}
-                style={{ marginBottom: "8px", padding: "0px 10px" }}
-              />
-          
-              <Handle
-                id="handle-1"
-                type="source"
-                position={Position.Right}
-                isConnectable
-                style={{
-                  background: "transparent",
-                  position: "absolute",
-                  width: "20px",
-                  right: "-19px",
-                  border: "none",
-                  top: "27%",
-                  height: "50px",
-                  zIndex: 10,
-                  transform: "translateY(-50%)",
-                }}
-              />
-          
-              <div
-                 style={{
-                  position: "absolute",
-                  right: "-7px",
-                  top: "23%",
-                  transform: "translateY(-50%)",
-                }}
-              >
-                {data?.isStartNode || alldata?.data?.isStartNode ? (
-                  isConnected ? <Badge status="success" /> : <Badge status="processing" />
-                ) : isConnectedToStartNode ? (
-                  <Badge status="success" />
+              {/* First Answer */}
+              <div style={{ position: "relative", marginBottom: "8px" }}>
+                {alldata?.data?.allowMultiple ? (
+                  <Paragraph
+                    style={{
+                      lineHeight: "1.00",
+                      padding: "0px 10px",
+                    }}
+                  >
+                    <small>{"Select Multiple"}</small>
+                  </Paragraph>
                 ) : (
-                  <Badge status="processing" />
+                  <Paragraph
+                    style={{
+                      lineHeight: "1.00",
+                      padding: "0px 10px",
+                    }}
+                  >
+                    <small>{"Select One"}</small>
+                  </Paragraph>
                 )}
-              </div>
-            </div>
-          
-            {/* Second Answer */}
-            <div style={{ position: "relative", marginBottom: "8px" }}>
-              <Row
-                style={{
-                  width: "100%",
-                  padding: "0px 10px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Col>
-                  <Radio onChange={handleOptionChange}>{`option 2`}</Radio>
-                </Col>
-                <Col>
-                  <Avatar icon={<UserOutlined />} size="small" />
-                </Col>
+
+                <Row
+                  style={{
+                    width: "100%",
+                    padding: "0px 10px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Col>
+                    {alldata?.data?.allowMultiple ? (
+                      <Checkbox
+                        // value={label}
+                        // checked={selectedOptions.includes(label)}
+                        onChange={handleOptionChange}
+                      >
+                        {`option 1`}
+                      </Checkbox>
+                    ) : (
+                      <Radio onChange={handleOptionChange}>{`option 1`}</Radio>
+                    )}
+                  </Col>
+                  <Col>
+                    <Avatar icon={<UserOutlined />} size="small" />
+                  </Col>
+                </Row>
+
+                <Progress
+                  showInfo={false}
+                  percent={0}
+                  strokeColor={"#87d068"}
+                  strokeWidth={10}
+                  style={{ marginBottom: "8px", padding: "0px 10px" }}
+                />
+
                 <Handle
-                id="handle-2"
-                type="source"
-                position={Position.Right}
-                isConnectable
-                style={{
-                  background: "transparent",
-                  position: "absolute",
-                  width: "20px",
-                  right: "-19px",
-                  border: "none",
-                  top: "27%",
-                  height: "50px",
-                  zIndex: 10,
-                  transform: "translateY(-50%)",
-                }}
-              />
-          
-              <div
-                style={{
-                  position: "absolute",
-                  right: "-7px",
-                  top: "23%",
-                  transform: "translateY(-50%)",
-                }}
-              >
-                {data?.isStartNode || alldata?.data?.isStartNode ? (
-                  isConnected ? <Badge status="success" /> : <Badge status="processing" />
-                ) : isConnectedToStartNode ? (
-                  <Badge status="success" />
-                ) : (
-                  <Badge status="processing" />
-                )}
+                  id="handle-1"
+                  type="source"
+                  position={Position.Right}
+                  isConnectable
+                  style={{
+                    background: "transparent",
+                    position: "absolute",
+                    width: "20px",
+                    right: "-19px",
+                    border: "none",
+                    top: "27%",
+                    height: "50px",
+                    zIndex: 10,
+                    transform: "translateY(-50%)",
+                  }}
+                />
+
+                <div
+                  style={{
+                    position: "absolute",
+                    right: "-7px",
+                    top: "23%",
+                    transform: "translateY(-50%)",
+                  }}
+                >
+                  {data?.isStartNode || alldata?.data?.isStartNode ? (
+                    isConnected ? (
+                      <Badge status="success" />
+                    ) : (
+                      <Badge status="processing" />
+                    )
+                  ) : isConnectedToStartNode ? (
+                    <Badge status="success" />
+                  ) : (
+                    <Badge status="processing" />
+                  )}
+                </div>
               </div>
-              </Row>
-              
-              <Progress
-                showInfo={false}
-                percent={0}
-                strokeColor={"#87d068"}
-                strokeWidth={10}
-                style={{ marginBottom: "8px", padding: "0px 10px" }}
-              />
-          
-            
-            </div>
-          </>
-          
+
+              {/* Second Answer */}
+              <div style={{ position: "relative", marginBottom: "8px" }}>
+                <Row
+                  style={{
+                    width: "100%",
+                    padding: "0px 10px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Col>
+                    {alldata?.data?.allowMultiple ? (
+                      <Checkbox
+                        // value={label}
+                        // checked={selectedOptions.includes(label)}
+                        onChange={handleOptionChange}
+                      >
+                        {`option 2`}
+                      </Checkbox>
+                    ) : (
+                      <Radio onChange={handleOptionChange}>{`option 2`}</Radio>
+                    )}
+                  </Col>
+                  <Col>
+                    <Avatar icon={<UserOutlined />} size="small" />
+                  </Col>
+                  <Handle
+                    id="handle-2"
+                    type="source"
+                    position={Position.Right}
+                    isConnectable
+                    style={{
+                      background: "transparent",
+                      position: "absolute",
+                      width: "20px",
+                      right: "-19px",
+                      border: "none",
+                      top: "27%",
+                      height: "50px",
+                      zIndex: 10,
+                      transform: "translateY(-50%)",
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      position: "absolute",
+                      right: "-7px",
+                      top: "23%",
+                      transform: "translateY(-50%)",
+                    }}
+                  >
+                    {data?.isStartNode || alldata?.data?.isStartNode ? (
+                      isConnected ? (
+                        <Badge status="success" />
+                      ) : (
+                        <Badge status="processing" />
+                      )
+                    ) : isConnectedToStartNode ? (
+                      <Badge status="success" />
+                    ) : (
+                      <Badge status="processing" />
+                    )}
+                  </div>
+                </Row>
+
+                <Progress
+                  showInfo={false}
+                  percent={0}
+                  strokeColor={"#87d068"}
+                  strokeWidth={10}
+                  style={{ marginBottom: "8px", padding: "0px 10px" }}
+                />
+              </div>
+            </>
           )}
         </div>
         {/* </Card> */}

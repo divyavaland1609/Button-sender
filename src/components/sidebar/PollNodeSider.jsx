@@ -139,7 +139,7 @@ const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
   // };
 
   const addNewCard = () => {
-    if (options.length < 6) {
+    if (options.length < 12) {
       setOptions((prev) => {
         const newOption = {
           value: "",
@@ -157,7 +157,7 @@ const PollNodeSider = ({ title, setSelectedNode, selectedNode }) => {
         return updatedOptions;
       });
     } else {
-      message.warning("Cannot add more than 6 options");
+      message.warning("Cannot add more than 12 options");
     }
   };
 
