@@ -1147,8 +1147,16 @@ div:where(.css-dev-only-do-not-override-tqzgtm).ant-typography,
 }
 
 .carousel-slide {
-  background-size: cover;
-  background-position: center;
+  background-size: contain; /* Adjust the image size to fit inside the container */
+  background-position: center center; /* Keep the image centered both horizontally and vertically */
   height: 400px;
   border-radius: 10px;
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+}
+
+
+div:where(.css-dev-only-do-not-override-19x04jx).ant-typography, :where(.css-dev-only-do-not-override-19x04jx).ant-typography p {
+  margin-bottom: 0em;
 }
