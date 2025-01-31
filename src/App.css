@@ -1140,9 +1140,10 @@ div:where(.css-dev-only-do-not-override-tqzgtm).ant-typography,
   box-shadow: none !important;
 }
 .carousel-container {
-  width: 200px;
-  max-width: 200px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 200px; /* Max width of the entire carousel container */
+  margin: auto;
+  /* height: 200px;  */
 }
 
 .carousel-slide {

@@ -125,21 +125,30 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
       return { ...prev, actions };
     });
   };
+
   const addNewCard = () => {
     if (data.actions.length < 5) {
       setData((prev) => {
+        let newType = "quick"; 
+        if (prev.actions.length === 3) {
+          newType = "call";
+        } else if (prev.actions.length === 4) {
+          newType = "url"; 
+        }
+  
         const value = {
           ...prev,
           actions: [
             ...prev.actions,
             {
               id: prev.actions.length,
-              type: "quick",
+              type: newType, 
               title: "",
               payload: "",
             },
           ],
         };
+  
         const data = { selectedNode, value: value.actions, key: "actions" };
         dispatch(setUpdateNodeData(data));
         return value;
@@ -148,6 +157,7 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
       message.warning("Cannot add more than 5 buttons");
     }
   };
+  
   // const addNewCard = () => {
   //   if (data.actions.length < 5) {
   //     setData((prev) => {
@@ -171,6 +181,7 @@ const ButtonNodeSidebar = ({ title, setSelectedNode, selectedNode }) => {
   //     message.warning("Cannot add more than 5 buttons");
   //   }
   // };
+  
 
   // const deleteCard = (index) => {
   //   if (data.actions.length > 1) {
@@ -569,10 +580,20 @@ const quickReplyCount2 = data.actions.filter(btn => btn.type === "url").length;
                           name={`button-url-${index}`}
                           label="URL"
                           initialValue={btn.payload}
+                          rules={[
+                            {
+                              required: true,
+                              message: "URL is required",
+                            },
+                            {
+                              type: "url",
+                              message: "Enter a valid URL",
+                            },
+                          ]}
                         >
                           <Input
                             size="small"
-                            addonBefore={selectBefore}
+                            // addonBefore={selectBefore}
                             value={btn.payload}
                             onChange={(e) =>
                               handleChange(index, "payload", e.target.value)

@@ -382,7 +382,7 @@ const ButtonNode = ({ data, selected }) => {
             <Image
               style={{
                 height: "100px",
-                marginTop: "3px",
+                marginTop: "5px",
                 borderRadius: "14px",
                 objectFit: "cover",
                 width: "200px",

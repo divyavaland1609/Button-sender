@@ -425,7 +425,7 @@ import { setUpdateNodeData } from "../../redux/nodesSlice";
               <Image
                 style={{
                   height: cardStyle.imageWidth,
-                  marginTop: "3px",
+                  marginTop: "5px",
                   borderRadius: "14px",
                   objectFit: "cover",
                   width: "200px",

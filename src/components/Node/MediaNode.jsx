@@ -431,47 +431,50 @@ function MediaNode({ data, selected }) {
               )} */}
 
               {alldata?.data?.mediaArray?.length > 0 ? (
-                <Swiper
-                  effect={"coverflow"}
-                  grabCursor={true}
-                  centeredSlides={true}
-                  slidesPerView={3}
-                  loop={true}
-                  modules={[EffectCoverflow]}
-                  pagination={{ clickable: true }}
-                  coverflowEffect={{
-                    rotate: 0,
-                    stretch: 0,
-                    depth: 120,
-                    modifier: 2,
-                    slideShadows: false,
+              <Swiper
+              effect={"coverflow"}
+              grabCursor={true}
+              centeredSlides={true}
+              slidesPerView={3}
+              loop={true}
+              modules={[EffectCoverflow]}
+              pagination={{ clickable: true }}
+              coverflowEffect={{
+                rotate: 0,
+                stretch: 0,
+                depth: 120,
+                modifier: 2,
+                slideShadows: false,
+              }}
+              className="carousel-container"
+              onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
+            >
+              {alldata?.data?.mediaArray.map((slide, index) => (
+                <SwiperSlide
+                  key={index}
+                  onClick={() => handleSlideClick(index)}
+                  style={{
+                    cursor: "pointer",
+                  
+                    width: "  5.6667px", // Set width of each slide
+                    transform:
+                      activeSlide === index ? "scale(1.1) translateX(-50%)" : "scale(0.9) translateX(0)",
                   }}
-                  className="carousel-container"
-                  onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
                 >
-                  {alldata?.data?.mediaArray.map((slide, index) => (
-                    <SwiperSlide
-                      key={index}
-                      onClick={() => handleSlideClick(index)}
-                      style={{
-                        cursor: "pointer",
-                        transform:
-                          activeSlide === index ? "scale(1.1)" : "scale(0.9)",
-                      }}
-                    >
-                      <img
-                        src={slide.url}
-                        alt={`Media ${index}`}
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                          borderRadius: "14px",
-                        }}
-                      />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                  <img
+                    src={slide.url}
+                    alt={`Media ${index}`}
+                    style={{
+                      width: "190px",
+                      height: "100px",
+                      objectFit: "cover",
+                      borderRadius: "14px",
+                    }}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            
               ) : (
                 <Image
                   src={
