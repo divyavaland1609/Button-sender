@@ -44,6 +44,8 @@ const ListNode = ({ data, selected }) => {
     toggleNodeState,
   } = data;
   const id = data.id;
+const { Paragraph } = Typography;
+
   const dispatch = useDispatch();
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes.find((item) => item.id === id);
@@ -408,15 +410,24 @@ const ListNode = ({ data, selected }) => {
               />
             ) : null}
             <Typography>
-              <Title
-                level={5}
+            <Paragraph
+            style={{
+              padding: "10px 10px 0px 10px",
+              // padding: "8px",
+            }}
+          >
+            <small>
+              {alldata?.data?.menuTitle?.replace(/\n/g, "<br/>") || "message"}
+            </small>
+          </Paragraph>
+              {/* <Title
                 style={{
                   margin: "0px",
                   padding: "10px 0px 0px 10px",
                 }}
               >
                 {alldata?.data?.menuTitle ?? "Header Title"}
-              </Title>
+              </Title> */}
               <Text
                 type="secondary"
                 style={{

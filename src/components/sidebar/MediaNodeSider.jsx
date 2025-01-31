@@ -184,6 +184,7 @@ const MediaNodeSider = ({ selectedNode }) => {
               <Dragger
                 customRequest={handleMediaUpload}
                 showUploadList={false}
+                multiple={true}
                 style={{ padding: 10 }}
               >
                 {uploadButton}

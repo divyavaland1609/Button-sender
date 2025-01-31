@@ -21,6 +21,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUpdateNodeData } from "../../redux/nodesSlice";
 import Dragger from "antd/es/upload/Dragger";
+import TextEditor from "../Node/Texteditor";
 
 function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
   const [form] = Form.useForm();
@@ -57,7 +58,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
   const [editingCardId, setEditingCardId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [imageUrl, setImageUrl] = useState(alldata?.data?.mediaUrl ?? "");
-  const[listTitle,setListTitle]=useState(alldata?.data?.listTitle?? "");
+  const [listTitle, setListTitle] = useState(alldata?.data?.listTitle ?? "");
   const [loading] = useState(false);
 
   useEffect(() => {
@@ -67,7 +68,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
       setMenuTitle(alldata.data?.menuTitle ?? "Header Title");
       // setImageUrl(alldata?.data?.imageUrl ?? "");
       setFooterTitle(alldata.data?.footerTitle ?? "Footer Title");
-      setListTitle(alldata?.data?.listTitle?? "List");  
+      setListTitle(alldata?.data?.listTitle ?? "List");
       setData({
         actions: Array.isArray(alldata.data?.actions)
           ? alldata.data.actions
@@ -98,7 +99,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
   };
 
   const addNewCard = () => {
-    if (data.actions.length < 11) {
+    if (data.actions.length < 25) {
       const newCard = { id: data.actions.length, title: "", description: "" };
       setData((prev) => {
         const updatedActions = [...prev.actions, newCard];
@@ -112,7 +113,7 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
         return { ...prev, actions: updatedActions };
       });
     } else {
-      message.warning("Cannot add more than 11 List");
+      message.warning("Cannot add more than 25 List");
     }
   };
 
@@ -150,9 +151,10 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
     dispatch(setUpdateNodeData(data));
   };
 
-  const handleMenuTitleChange = (e) => {
-    setMenuTitle(e.target.value);
-    const data = { selectedNode, value: e.target.value, key: "menuTitle" };
+  const handleMenuTitleChange = (value) => {
+    const MessageName = value;
+    setMenuTitle(MessageName);
+    const data = { selectedNode, value, key: "menuTitle" };
     dispatch(setUpdateNodeData(data));
   };
 
@@ -271,27 +273,31 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
           >
             <EditOutlined />
           </Col>
-          <Col md={10} style={{ paddingRight: "8px" ,paddingTop:"5px"}}>
+          <Col md={10} style={{ paddingRight: "8px", paddingTop: "5px" }}>
             <Badge.Ribbon text="List Message" className="badge">
               <div style={{ width: "100%" }}></div>{" "}
             </Badge.Ribbon>
           </Col>
         </Row>
-        <Form.Item label="Menu Title">
-          <Input
+        <Form.Item label="Message">
+          <TextEditor
+            className="ql-editor"
+            value={menuTitle}
+            onChange={(value) => handleMenuTitleChange(value)}
+          />
+          {/* <Input
             size="small"
             placeholder="Enter Menu Title"
             value={menuTitle}
             onChange={handleMenuTitleChange}
-            // onChange={(e) => setMenuTitle(e.target.value)}
-          />
+          /> */}
         </Form.Item>
-        <Form.Item label="Menu Middle Title">
+        <Form.Item label="Menu Title">
           <Input
             size="small"
-            placeholder="Enter Menu Middle Title"
-            value={middleTitle}
-            onChange={handleMiddleTitleChange}
+            placeholder="Enter Menu  Title"
+            value={listTitle}
+            onChange={handleListTitleChange}
             // onChange={(e) => setMiddleTitle(e.target.value)}
           />
         </Form.Item>
@@ -304,15 +310,15 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
             // onChange={(e) => setFooterTitle(e.target.value)}
           />
         </Form.Item>
-        {/* <Form.Item label="List Title">
+        <Form.Item label="Menu Middle Title">
           <Input
             size="small"
-            placeholder="Enter List Title"
-            value={listTitle}
-            onChange={handleListTitleChange}
+            placeholder="Enter Menu Middle Title"
+            value={middleTitle}
+            onChange={handleMiddleTitleChange}
             // onChange={(e) => setFooterTitle(e.target.value)}
           />
-        </Form.Item> */}
+        </Form.Item>
         <Form.Item
           label={
             <>
@@ -322,7 +328,11 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
           }
           required={false}
         >
-          <Dragger {...props} customRequest={customUpload} showUploadList={false}>
+          <Dragger
+            {...props}
+            customRequest={customUpload}
+            showUploadList={false}
+          >
             {imageUrl ? (
               <img
                 src={imageUrl?.response?.url || imageUrl}
@@ -350,7 +360,11 @@ function ListNodeSidebar({ title, setSelectedNode, selectedNode }) {
           )}
         </Form.Item>
 
-        <Flex justify="space-between" align="center" style={{padding:"14px 0px 8px"}}>
+        <Flex
+          justify="space-between"
+          align="center"
+          style={{ padding: "14px 0px 8px" }}
+        >
           {/* <Form.Item label="Button Label" /> */}
           <Typography.Text>List</Typography.Text>
           <Button size="small" onClick={addNewCard}>
