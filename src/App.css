@@ -1141,20 +1141,16 @@ div:where(.css-dev-only-do-not-override-tqzgtm).ant-typography,
 }
 .carousel-container {
   width: 100%;
-  max-width: 200px; /* Max width of the entire carousel container */
+  max-width: 200px; /* Limit carousel width */
   margin: auto;
-  /* height: 200px;  */
 }
 
 .carousel-slide {
-  background-size: contain; /* Adjust the image size to fit inside the container */
-  background-position: center center; /* Keep the image centered both horizontally and vertically */
-  height: 400px;
+  overflow: hidden;
   border-radius: 10px;
-  display: flex;
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
 }
+
+
 :where(.css-dev-only-do-not-override-14yqtba).ant-tabs .ant-tabs-tab {
   position: relative;
   -webkit-touch-callout: none;
