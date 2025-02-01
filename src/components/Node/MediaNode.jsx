@@ -370,7 +370,7 @@ function MediaNode({ data, selected }) {
             </Flex>
           </div>
 
-          <div className="card-body" style={{ width: 200, marginTop: "5px",marginBottom:"-1px" }}>
+          <div className="card-body" style={{ width: 200, marginTop: "5px", }}>
             <>
               {/* {alldata?.data?.mediaArray?.length > 0 ? (
                 alldata?.data?.mediaArray.map((media, index) => (
@@ -447,6 +447,7 @@ function MediaNode({ data, selected }) {
                     height: "auto",
                     maxHeight: "320px",
                     // marginBottom:"-11.5px",
+                    marginBottom:"-6px",
                     overflow: "hidden",
                   }} // Fixed height
                 >

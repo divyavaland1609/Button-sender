@@ -726,9 +726,9 @@ div:where(.css-dev-only-do-not-override-18r4zd7).ant-typography,
   background: #fff url("../src//assets//footer-bg-1.png");
 }
 
-/* ::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 0px;
-} */
+}
 
 .ant-pro-layout .ant-pro-sider-logo {
   height: 0px;
@@ -765,7 +765,7 @@ div:where(.css-dev-only-do-not-override-18r4zd7).ant-typography,
   height: 18px;
   width: 100%;
   /* border-radius: 12px 12px 0px 0; */
-  /* z-index: 1; */
+  z-index: 2;
   color: white;
   font-weight: bold;
 }
@@ -1139,13 +1139,21 @@ div:where(.css-dev-only-do-not-override-tqzgtm).ant-typography,
   background: #ffffff00;
   box-shadow: none !important;
 }
-.carousel-container {
+/* .carousel-container {
   width: 100%;
-  max-width: 200px; /* Limit carousel width */
+  max-width: 200px; 
   margin: auto;
-  height: auto; /* Remove fixed height */
-  max-height: 320px; /* Prevent extra spacing */
-  overflow: hidden; /* Hide unnecessary space */
+  height: auto; 
+  max-height: 320px; 
+  overflow: hidden; 
+} */
+
+.carousel-container {
+  position: relative;
+  margin-top: 10px;
+  overflow: hidden;
+  z-index: 1;
+  margin-bottom: 10px;
 }
 
 .carousel-slide {
@@ -1154,7 +1162,15 @@ div:where(.css-dev-only-do-not-override-tqzgtm).ant-typography,
   align-items: center;
   height: 100%;
 }
-
+.swiper-slide {
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition-property: transform;
+  display: block;
+  margin-bottom: -6px;
+}
 
 
 :where(.css-dev-only-do-not-override-14yqtba).ant-tabs .ant-tabs-tab {
