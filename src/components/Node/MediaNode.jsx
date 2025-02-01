@@ -370,7 +370,7 @@ function MediaNode({ data, selected }) {
             </Flex>
           </div>
 
-          <div className="card-body" style={{ width: 200,marginTop:"5px" }}>
+          <div className="card-body" style={{ width: 200, marginTop: "5px",marginBottom:"-1px" }}>
             <>
               {/* {alldata?.data?.mediaArray?.length > 0 ? (
                 alldata?.data?.mediaArray.map((media, index) => (
@@ -425,50 +425,53 @@ function MediaNode({ data, selected }) {
               )} */}
 
               {alldata?.data?.mediaArray?.length > 0 ? (
-              <Swiper
-              effect="coverflow"
-              grabCursor
-              direction="vertical"
-              centeredSlides
-              slidesPerView={3}
-              loop
-              modules={[EffectCoverflow]}
-              pagination={{ clickable: true }}
-              coverflowEffect={{
-                rotate: 0,
-                stretch: 50, // Space between overlapping slides
-                depth: 150,  // Increase depth to separate images
-                modifier: 1.5,
-                slideShadows: true, // Enable shadows for better 3D effect
-              }}
-              className="carousel-container"
-              style={{ marginBottom: "-6px", height: "400px" }}
-            >
-              {alldata?.data?.mediaArray.map((slide, index) => (
-                <SwiperSlide key={index} className="carousel-slide">
-                  <img
-                    src={slide.url}
-                    alt={`Media ${index}`}
-                    style={{
-                      width: "100%",
-                      maxWidth: "200px",
-                      height: "300px",
-                      objectFit: "cover",
-                      borderRadius: "10px",
-                    }}
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            
+                <Swiper
+                  effect="coverflow"
+                  grabCursor
+                  direction="vertical"
+                  centeredSlides
+                  slidesPerView="auto" // Prevents extra space
+                  loop
+                  modules={[EffectCoverflow]}
+                  pagination={{ clickable: true }}
+                  coverflowEffect={{
+                    rotate: 0,
+                    stretch: 50,
+                    depth: 150,
+                    modifier: 1.5,
+                    slideShadows: true,
+                  }}
+                  className="carousel-container"
+                  style={{
+                    margin: "0",
+                    height: "auto",
+                    maxHeight: "320px",
+                    // marginBottom:"-11.5px",
+                    overflow: "hidden",
+                  }} // Fixed height
+                >
+                  {alldata?.data?.mediaArray.map((slide, index) => (
+                    <SwiperSlide key={index} className="carousel-slide">
+                      <img
+                        src={slide.url}
+                        alt={`Media ${index}`}
+                        style={{
+                          width: "100%",
+                          maxWidth: "200px",
+                          height: "300px",
+                          objectFit: "cover",
+                          borderRadius: "14px",
+                        }}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               ) : (
                 <Image
-                  src={
-                    "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
-                  }
+                  src="https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
                   alt="example"
                   style={{
-                    marginTop: "3px",
+                    // marginTop: "3px",
                     borderRadius: "14px",
                     width: "200px",
                     height: "100px",

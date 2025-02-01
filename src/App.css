@@ -1143,12 +1143,18 @@ div:where(.css-dev-only-do-not-override-tqzgtm).ant-typography,
   width: 100%;
   max-width: 200px; /* Limit carousel width */
   margin: auto;
+  height: auto; /* Remove fixed height */
+  max-height: 320px; /* Prevent extra spacing */
+  overflow: hidden; /* Hide unnecessary space */
 }
 
 .carousel-slide {
-  overflow: hidden;
-  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
+
 
 
 :where(.css-dev-only-do-not-override-14yqtba).ant-tabs .ant-tabs-tab {
@@ -1169,4 +1175,8 @@ div:where(.css-dev-only-do-not-override-tqzgtm).ant-typography,
 
 div:where(.css-dev-only-do-not-override-19x04jx).ant-typography, :where(.css-dev-only-do-not-override-19x04jx).ant-typography p {
   margin-bottom: 0em;
+}
+
+.swiper-3d {
+  perspective: none;
 }
