@@ -796,7 +796,7 @@ const DnDFlow = () => {
                       edges={edges}
                       styles={{
                         position: "absolute",
-                        top: "-480px",
+                        top: "-515px",
                         right: "60px",
                         borderRadius: 10,
                         width: 300,

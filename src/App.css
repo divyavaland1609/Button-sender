@@ -597,6 +597,11 @@ input:focus {
   padding: 10px;
   width: 100%;
   overflow-y: auto;
+  height: 400px;
+
+}
+::-webkit-scrollbar {
+  width: 0px;
 }
 .chat-message text-message {
   padding: 3px;

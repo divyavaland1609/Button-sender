@@ -581,6 +581,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
       <ProChat
         locale="en-US"
         chats={chats}
+        style={{ height: 500 }}
         onChatsChange={(chats) => {
           setChats(chats);
         }}
