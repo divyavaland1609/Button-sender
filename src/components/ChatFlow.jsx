@@ -31,6 +31,7 @@ import {
   UnorderedListOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+const { Title, Text } = Typography;
 
 const ChatFlow = ({ styles, nodeData, edges }) => {
   const [chats, setChats] = useState([]);
@@ -38,7 +39,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [currentNodeId, setCurrentNodeId] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState([]);
- const nodeRef = useRef (null);
+  const nodeRef = useRef(null);
   const chatContainerRef = useRef(null);
   useEffect(() => {
     if (nodeData && Array.isArray(nodeData)) {
@@ -377,7 +378,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                   "message",
               }}
             />
-            <div
+            {/* <div
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -389,7 +390,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                   item?.originData?.middleTitle?.replace(/\n/g, "<br/>") ||
                   "message",
               }}
-            />
+            /> */}
             <div
               style={{
                 display: "flex",
@@ -403,11 +404,11 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                   "message",
               }}
             />
-            {Array.isArray(item?.originData?.actions) ? (
+            {/* {Array.isArray(item?.originData?.actions) ? (
               <Divider style={{ margin: "0px" }} />
             ) : (
               ""
-            )}
+            )} */}
             <Button
               onClick={() => {
                 setIsDrawerOpen(!isDrawerOpen); // Toggle the drawer visibility
@@ -426,7 +427,7 @@ const ChatFlow = ({ styles, nodeData, edges }) => {
                   style={{ fontSize: "10px", margin: "2px", color: "blue" }}
                 >
                   {" "}
-                  Menu Middle Title
+                  {item?.originData?.middleTitle ?? "Menu Middle Title"}
                 </Title>
 
                 <div>

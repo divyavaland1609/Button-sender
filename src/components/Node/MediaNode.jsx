@@ -105,33 +105,23 @@ function MediaNode({ data, selected }) {
           value: !node.data.disabled, // Disabling the node
         })
       );
-      // Toggle the state of the connected node to 'disabled'
-      data.toggleNodeState(node.id, node.data.disabled); // Disabling the node
+      // Toggle the state of the
+      data.toggleNodeState(node.id, node.data.disabled);
     });
   };
 
   const findNodesTillLast = (sourceId, visitedNodes = new Set()) => {
     let connectedNodes = [];
-
-    // Prevent visiting the same node again
     if (visitedNodes.has(sourceId)) {
-      return connectedNodes; // Return early if the node has already been visited
+      return connectedNodes;
     }
-
-    // Mark this node as visited
     visitedNodes.add(sourceId);
-
-    // Find all edges connected to the current sourceId
     const edgesOfCurrentNode = edges.filter((edge) => edge.source === sourceId);
-
-    // Loop through all connected edges
     edgesOfCurrentNode.forEach((edge) => {
-      // Find the target node connected through the edge
       const nextNode = nodes.find((node) => node.id === edge.target);
 
       if (nextNode) {
-        connectedNodes.push(nextNode); // Add connected node to the list
-        // Recursively find the next connected nodes
+        connectedNodes.push(nextNode);
         const nextConnectedNodes = findNodesTillLast(nextNode.id, visitedNodes);
         connectedNodes = [...connectedNodes, ...nextConnectedNodes];
       }
@@ -144,14 +134,12 @@ function MediaNode({ data, selected }) {
     const edgesofCurentNode = edges
       .filter((edge) => edge.target === id)
       .map((item) => item.source);
-    // console.log("edgesofCurentNode", edgesofCurentNode);
     const currentEdges = [...new Set(edgesofCurentNode)];
 
     const disabledNodes = nodes
       ?.filter((node) => node.data.disabled === true)
       ?.filter((node) => currentEdges.includes(node.id));
 
-    // console.log("isConnected", disabledNodes, currentEdges);
 
     return disabledNodes.length === currentEdges.length &&
       currentEdges.length > 0
@@ -160,10 +148,8 @@ function MediaNode({ data, selected }) {
   };
 
   const isConnected = isLastNodeConnect();
-  // console.log("isConnected", isConnected);
 
   const nodeStyle = {
-    // opacity: isConnected ? 0.5 : 1,
     filter: isConnected ? "grayscale(100%) opacity(0.5)" : "none",
     border: !enabled
       ? "3px solid #D9D9D9"
@@ -327,7 +313,6 @@ function MediaNode({ data, selected }) {
             },
           }}
           style={{
-            // width: 200,
             padding: "-1px",
             borderRadius: "14px",
             background: "rgba(255, 255, 255, 0.2)",
@@ -372,65 +357,13 @@ function MediaNode({ data, selected }) {
 
           <div className="card-body" style={{ width: 200, marginTop: "5px", }}>
             <>
-              {/* {alldata?.data?.mediaArray?.length > 0 ? (
-                alldata?.data?.mediaArray.map((media, index) => (
-                  <>
-                    <Flex
-                      vertical
-                      gap={12}
-                      style={{
-                        width: "50%",
-                        // background: "rgba(255, 255, 255, 0.7)",
-                        display: "flex",
-                        flexDirection: "column",
-                        // marginTop: "3px",
-                        
-                      }}
-                    >
-                      <Image
-                        key={index}
-                        src={
-                          media.url ||
-                          "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
-                        }
-                        alt={media.name || "media image"}
-                        style={{
-                          marginTop: "3px",
-                          borderRadius: "14px",
-                          width: "200px",
-                          height: "150px",
-                          // objectFit: "cover",
-                        }}
-                        preview={false}
-                      />
-                    </Flex>
-                  </>
-                ))
-
-              ) : (
-                <Image
-                  src={
-                    "https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
-                  }
-                  alt="example"
-                  style={{
-                    marginTop: "3px",
-                    borderRadius: "14px",
-                    width: "200px",
-                    height: "100px",
-                    objectFit: "cover",
-                  }}
-                  preview={false}
-                />
-              )} */}
-
               {alldata?.data?.mediaArray?.length > 0 ? (
                 <Swiper
                   effect="coverflow"
                   grabCursor
                   direction="vertical"
                   centeredSlides
-                  slidesPerView="auto" // Prevents extra space
+                  slidesPerView="auto"
                   loop
                   modules={[EffectCoverflow]}
                   pagination={{ clickable: true }}
@@ -446,10 +379,9 @@ function MediaNode({ data, selected }) {
                     margin: "0",
                     height: "auto",
                     maxHeight: "320px",
-                    // marginBottom:"-11.5px",
                     marginBottom:"-6px",
                     overflow: "hidden",
-                  }} // Fixed height
+                  }}
                 >
                   {alldata?.data?.mediaArray.map((slide, index) => (
                     <SwiperSlide key={index} className="carousel-slide">
@@ -472,7 +404,6 @@ function MediaNode({ data, selected }) {
                   src="https://medcities.org/wp-content/uploads/2021/05/generic_image_medcities-1.jpg"
                   alt="example"
                   style={{
-                    // marginTop: "3px",
                     borderRadius: "14px",
                     width: "200px",
                     height: "100px",
@@ -513,9 +444,6 @@ function MediaNode({ data, selected }) {
                 alignItems: "center",
                 justifyContent: "center",
                 top: "-50px",
-                // left:"-50.1%",
-                // right:"-50.1%",
-
                 left: alldata?.data?.isStartNode ? "auto" : "-50.1%",
                 right: alldata?.data?.isStartNode ? "-50.1%" : "null",
               }}

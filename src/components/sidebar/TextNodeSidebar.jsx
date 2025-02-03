@@ -13,7 +13,12 @@ import {
   Typography,
   Upload,
 } from "antd";
-import { DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  LoadingOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import SideBarHeader from "./components/SideBarHeader";
 import { useDispatch, useSelector } from "react-redux";
@@ -173,15 +178,6 @@ const TextNodeSidebar = ({ setSelectedNode, title, selectedNode }) => {
             </Badge.Ribbon>
           </Col>
         </Row>
-
-        {/* <Form.Item label="Template Name">
-          <Input
-            size="small"
-            placeholder="Enter Template Name"
-            onChange={handleTemplateNameChange}
-            value={templateName}
-          />
-        </Form.Item> */}
         <Form.Item
           label={
             <>
@@ -191,7 +187,11 @@ const TextNodeSidebar = ({ setSelectedNode, title, selectedNode }) => {
           }
           required={false}
         >
-          <Dragger {...props} customRequest={customUpload} showUploadList={false}>
+          <Dragger
+            {...props}
+            customRequest={customUpload}
+            showUploadList={false}
+          >
             {imageUrl ? (
               <img
                 src={imageUrl?.response?.url || imageUrl}
@@ -206,17 +206,17 @@ const TextNodeSidebar = ({ setSelectedNode, title, selectedNode }) => {
             )}
           </Dragger>
           {imageUrl && (
-                <DeleteOutlined
-                  style={{
-                    position: "absolute",
-                    top: 6,
-                    right: 6,
-                    color: "red",
-                    cursor: "pointer",
-                  }}
-                  onClick={handleDelete} // Delete handler
-                />
-              )}
+            <DeleteOutlined
+              style={{
+                position: "absolute",
+                top: 6,
+                right: 6,
+                color: "red",
+                cursor: "pointer",
+              }}
+              onClick={handleDelete}
+            />
+          )}
         </Form.Item>
         <Form.Item label="Message">
           <TextEditor
@@ -226,20 +226,9 @@ const TextNodeSidebar = ({ setSelectedNode, title, selectedNode }) => {
               handleMessageChange(value);
             }}
           />
-          {/* <TextArea
-                rows={4}
-                placeholder="Enter Message"
-                onChange={handleMessageChange}
-                value={message1}
-              /> */}
         </Form.Item>
       </Form>
     </ConfigProvider>
-    //     </div>
-    // )}
-    // >
-
-    // </ProLayout>
   );
 };
 export default TextNodeSidebar;

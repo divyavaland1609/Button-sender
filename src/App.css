@@ -1134,7 +1134,7 @@ div:where(.css-dev-only-do-not-override-tqzgtm).ant-typography,
   padding: 2px;
   overflow: auto;
 }
-:where(.css-dev-only-do-not-override-19x04jx).ant-drawer-bottom > .ant-drawer-content-wrapper {
+/* :where(.css-dev-only-do-not-override-19x04jx).ant-drawer-bottom > .ant-drawer-content-wrapper {
   bottom: 23px !important;
   width: 200px !important;
   height: auto !important;
@@ -1143,7 +1143,7 @@ div:where(.css-dev-only-do-not-override-tqzgtm).ant-typography,
   inset-inline: 0;
   background: #ffffff00;
   box-shadow: none !important;
-}
+} */
 /* .carousel-container {
   width: 100%;
   max-width: 200px; 

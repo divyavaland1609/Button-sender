@@ -277,35 +277,6 @@ const ButtonNode = ({ data, selected }) => {
         }}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* <Card
-          size="small"
-          bodyStyle={{
-            padding: "0px",
-            borderRadius: "14px",
-            background: "rgba(255, 255, 255, 0.8)",
-            boxShadow: "0px -10px 15px  rgba(0, 0, 0, 0.2)",
-          }}
-          headStyle={{
-            color: "#fff",
-            textAlign: "center",
-            borderRadius: "14px 14px 14px 0",
-            padding: "10px",
-            border: "none",
-            marginBottom: "-14px",
-          }}
-          style={{
-            width: 200,
-            // padding: "-10px",
-            borderRadius: "14px",
-            background: "rgba(255, 255, 255, 0.8)",
-            boxShadow: selected
-              ? "0 1px 10px rgba(64, 150, 255, 0.5)"
-              : isConnectedToStartNode
-              ? "0 1px 10px rgba(82, 196, 26, 0.5)"
-              : "0 1px 10px rgba(0, 0, 0, 0.15)",
-            filter: enabled ? "none" : "grayscale(100%) opacity(0.5)",
-          }}
-        > */}
         <div className="inverted-border-radius  shadow-pink">
           <Flex className="flex-grow" align="center" justify="space-between">
             <Typography className="title-name">
@@ -559,9 +530,7 @@ const ButtonNode = ({ data, selected }) => {
             </Button>
           )}
         </div>
-        {/* </Card> */}
       </div>
-      {/* )} */}
     </ConfigProvider>
   );
 };
